@@ -6,7 +6,7 @@ Thomas Dohmke
 
 ## Licenses
 
-The Hockey SDK is provided under the following license:
+HockeyApp for Windows is provided under the following license:
 
         The MIT License
         Copyright (c) Bit Stadium GmbH. All rights reserved.
