@@ -41,6 +41,7 @@ Before uploading, a dialog with all necessary information is opened. If more tha
 
 ## Upload-Mode (command line mode)
 For integrating the upload in a built server you have to use the command line tool. The command line tool HOCH.exe uses the same parameters as HockeyApp.exe - except one:
-[/verbose]: (optional) Verbose [true,false] (default is true)
+
+    [/verbose]: (optional) Verbose [true,false] (default is true)
 
 If using HOCH.exe the uploader has to identify one app exactly - if no or more than one app is found, the uploader throws an exception.
