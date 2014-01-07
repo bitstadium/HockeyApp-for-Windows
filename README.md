@@ -24,18 +24,18 @@ There are no default information in a custom app, which can be used. To ease the
 ## Upload-Mode (Dialog Mode)
 This mode can be started, when starting the HockeyApp.exe with parameters. The following parameters are supported:
 
-HockeyApp <PackageFile> [/version] [/configuration] [/app_id] [/bundle_id] [/status] [/notify] [/mandatory] [/notes] [/verbose] [/help]
-
-<PackageFile>: Fully qualified package filename to upload
-[/version]: Version information for new version (overwrites manifest information, if available)
-[/configuration]: (optional) Account name (of omitted, the default configuration is used)
-[/app_id]: (optional) HockeyApp Id (if used, only the app with id is searched)
-[/bundle_id]: (optional) Bundle identifier (overwrited manifest information, if available)
-[/status]: (optional) Status [created, downloadable] (overwrites the default values)
-[/notify]: (optional) Notify [none, eMail] (overwrites the default values)
-[/mandatory]: (optional) Mandatory [true, false] (overwrites the default values)
-[/notes]: (optional) Notes
-[/help]: Prints the usage
+    HockeyApp <PackageFile> [/version] [/configuration] [/app_id] [/bundle_id] [/status] [/notify] [/mandatory] [/notes] [/verbose] [/help]
+    
+    <PackageFile>: Fully qualified package filename to upload
+    [/version]: Version information for new version (overwrites manifest information, if available)
+    [/configuration]: (optional) Account name (of omitted, the default configuration is used)
+    [/app_id]: (optional) HockeyApp Id (if used, only the app with id is searched)
+    [/bundle_id]: (optional) Bundle identifier (overwrited manifest information, if available)
+    [/status]: (optional) Status [created, downloadable] (overwrites the default values)
+    [/notify]: (optional) Notify [none, eMail] (overwrites the default values)
+    [/mandatory]: (optional) Mandatory [true, false] (overwrites the default values)
+    [/notes]: (optional) Notes
+    [/help]: Prints the usage
 
 Before uploading, a dialog with all necessary information is opened. If more than one app matches the informations, a selection of the matching apps is opened.
 
