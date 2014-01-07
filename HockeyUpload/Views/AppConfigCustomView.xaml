@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="HockeyApp.AppLoader.Views.AppConfigCustomView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="300"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Text="Regular expression" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,0"/>
+        <TextBox x:Name="RegularExpression" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"  Margin="2"/>
+        
+        <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap">
+            <Run>
+            Regular Expression for matching a filename with the corresponding app. The regular expression is tested for the whole path in the command line argument when calling HockeyUploader - except for the file extension (*.zip, *.msi).
+            </Run>
+            <LineBreak/>
+            <LineBreak/>
+            <Run >
+            E.g.:
+            </Run>
+            <LineBreak/>
+            <Run>Packagename is</Run><Run Text=" "/><Run FontStyle="Italic">MyApp.zip</Run>
+            <Run Text="A matching RegExp is: "/><Run FontStyle="Italic" Text=".*MyApp"/>
+            <LineBreak/>
+            <Run>Or to differentiate between alpha an beta:</Run>
+            <LineBreak/>
+            <Run FontStyle="Italic" Text="    .*\alpa\MyApp"/>
+            <LineBreak/>
+            <Run FontStyle="Italic" Text="    .*\beta\MyApp"/>
+            <LineBreak/><LineBreak/>
+            <Run Text="see "/><Hyperlink Name="MyHyperlink" NavigateUri="http://msdn.microsoft.com/en-us/library/az24scfc.aspx" RequestNavigate="Hyperlink_RequestNavigate">RegExp-classes</Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

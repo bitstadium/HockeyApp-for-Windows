@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Caliburn.Micro.Logging</id>
+    <version>1.5.0.0</version>
+    <title>Caliburn.Micro.Logging</title>
+    <authors>David Buksbaum</authors>
+    <owners>David Buksbaum</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://buksbaum.us/2011/07/04/introducing-caliburn-micro-logging/</projectUrl>
+    <iconUrl>http://www.eyecatch.no/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides core logging functionality for Caliburn.Micro</description>
+    <summary>Core logging implementation for Caliburn.Micro, along with a derived extension to the ILog interface to support richer Error messages.</summary>
+    <releaseNotes>Upgraded to support Caliburn.Micro 1.4
+      Added support for Windows Phone 8</releaseNotes>
+    <copyright>Copyright David Buksbaum 2009-2012</copyright>
+    <tags>Caliburn.Micro Logging</tags>
+    <dependencies>
+      <dependency id="Caliburn.Micro" version="1.4" />
+    </dependencies>
+  </metadata>
+</package>
