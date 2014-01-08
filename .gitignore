@@ -31,3 +31,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
+
+# NuGet
+packages/*
+!packages/repositories.config
