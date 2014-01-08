@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:HockeyApp.AppLoader.Views.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,6 +26,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -36,6 +37,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+
         <TextBlock Text="Configuration Name" 
                    VerticalAlignment="Center"
                    Grid.Column="0" 
@@ -67,6 +69,11 @@
         <TextBox Grid.Column="1" Grid.Row="2"
                  Margin="0,2,0,2"
                  Text="{Binding UserToken, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+        
+        <Button x:Name="LookupAPIToken" 
+                Content="..." 
+                Grid.Row="2" Grid.Column="2" 
+                HorizontalAlignment="Left" Margin="2,0,0,0"/>
 
         <CheckBox Grid.Column="1"
                    Margin="0,2,0,2"
@@ -75,9 +82,11 @@
                   Content="Default configuration"
                   IsChecked="{Binding IsDefaultConfiguration}"/>
 
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="5" Orientation="Horizontal" FlowDirection="RightToLeft">
+        <StackPanel Grid.ColumnSpan="4" Grid.Row="5" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button Content="Cancel" x:Name="Cancel" Width="75"/>
             <Button Content="Save" x:Name="Save" Width="75"/>
         </StackPanel>
+        
+       
     </Grid>
 </UserControl>

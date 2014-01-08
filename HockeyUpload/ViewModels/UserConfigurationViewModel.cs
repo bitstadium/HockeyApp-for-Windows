@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using HockeyApp.AppLoader.Model;
+using HockeyApp.AppLoader.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,6 +61,8 @@ namespace HockeyApp.AppLoader.ViewModels
                 this._apiBase = value;
                 this.WasChanged = true;
                 this.NotifyOfPropertyChange(() => this.ApiBase);
+                this.NotifyOfPropertyChange(() => this.CanLookupAPIToken);
+                
             }
         }
 
@@ -97,6 +100,8 @@ namespace HockeyApp.AppLoader.ViewModels
                 NotifyOfPropertyChange(() => this.UserToken);
             }
         }
+
+     
 
         #region Commands
         public void Save()
@@ -152,6 +157,19 @@ namespace HockeyApp.AppLoader.ViewModels
         }
 
         public bool CanCancel { get { return true; } }
+
+        public void LookupAPIToken()
+        {
+            IWindowManager wm = IoC.Get<IWindowManager>();
+            LookupApiTokenViewModel vm = new LookupApiTokenViewModel(this.ApiBase);
+
+            if (wm.ShowDialog(vm).GetValueOrDefault(false))
+            {
+                this.UserToken = vm.SelectedApiToken.Token;
+            }
+        }
+
+        public bool CanLookupAPIToken { get { return this.ApiBase != null && this.ApiBase.Length > 0; } }
         #endregion
 
         #region IDataErrorInfo

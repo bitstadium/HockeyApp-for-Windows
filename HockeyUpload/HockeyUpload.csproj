@@ -126,6 +126,8 @@
     <Compile Include="Extensions\EnumValueExtension.cs" />
     <Compile Include="HockeyUploadBootstrapper.cs" />
     <Compile Include="MetroWindowManager.cs" />
+    <Compile Include="Model\ApiToken.cs" />
+    <Compile Include="Model\ApiTokenEnvelope.cs" />
     <Compile Include="Model\AppInfo.cs" />
     <Compile Include="Model\AppInfoEnvelope.cs" />
     <Compile Include="Model\CommandLineArgs.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="ViewModels\AppConfigViewModel.cs" />
     <Compile Include="ViewModels\ConfigurationContentViewModel.cs" />
     <Compile Include="ViewModels\InitialConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\LookupApiTokenViewModel.cs" />
     <Compile Include="ViewModels\NotSupportedPlatformViewModel.cs" />
     <Compile Include="ViewModels\PlatformDependendViewModel.cs" />
     <Compile Include="ViewModels\UploadDialogViewModel.cs" />
@@ -189,6 +192,9 @@
     <Compile Include="Views\Converters\MarkUpConverter.cs" />
     <Compile Include="Views\InitialConfigurationView.xaml.cs">
       <DependentUpon>InitialConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LookupApiTokenView.xaml.cs">
+      <DependentUpon>LookupApiTokenView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MetroMessageBoxView.xaml.cs">
       <DependentUpon>MetroMessageBoxView.xaml</DependentUpon>
@@ -265,6 +271,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InitialConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LookupApiTokenView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
