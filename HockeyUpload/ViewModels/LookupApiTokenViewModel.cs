@@ -51,6 +51,10 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
+        public bool IsInErrorState   {
+            get { return !String.IsNullOrWhiteSpace(this.ErrorMessage); }
+        }
+
         private string _errorMessage="";
         public string ErrorMessage
         {
@@ -59,6 +63,7 @@ namespace HockeyApp.AppLoader.ViewModels
             {
                 this._errorMessage = value;
                 NotifyOfPropertyChange(() => this.ErrorMessage);
+                NotifyOfPropertyChange(() => this.IsInErrorState);
             }
         }
 
@@ -100,15 +105,18 @@ namespace HockeyApp.AppLoader.ViewModels
 
         #region Commands
 
-        public async void LookupTokens()
+        public async Task LookupTokens()
         {
+            this.ApiTokens = null;
+            this.SelectedApiToken = null;
             this.ErrorMessage = "";
             this.BusyMessage = "Loading...";
             this.ViewIsBusy = true;
             try
             {
                 ApiTokenEnvelope envelope = await ApiTokenEnvelope.Load(this._apiBase, this.Username, this.Password);
-                this.ApiTokens = envelope.Tokens.Where(p => p.Rights.Equals("0")).ToList();
+                this.ApiTokens = envelope.Tokens.Where(p => p.Rights.Equals("0") || p.Rights.Equals("1")).ToList();
+                this.ApiTokens.Insert(0, new CreateNewApiToken());
                 NotifyOfPropertyChange(() => this.ApiTokens);
             }
             catch(Exception ex)
@@ -124,9 +132,39 @@ namespace HockeyApp.AppLoader.ViewModels
 
         public bool CanLookupTokens { get { return !String.IsNullOrWhiteSpace(this.Username) && !String.IsNullOrWhiteSpace(this.Password); } }
 
-        public void OK()
+        public async void OK()
         {
-            this.TryClose(true);
+            if (this.SelectedApiToken is CreateNewApiToken) {
+                this.BusyMessage = "Loading...";
+                this.ViewIsBusy = true;
+                try
+                {
+                    ApiToken newToken = await ApiTokenEnvelope.CreateNewToken(this._apiBase, this.Username, this.Password);
+                    await this.LookupTokens();
+                    ApiToken toSelect = this.ApiTokens.FirstOrDefault(p => p.Token.Equals(newToken.Token));
+                    if (toSelect != null)
+                    {
+                        this.SelectedApiToken = toSelect;
+                    }
+                    else
+                    {
+                        this.SelectedApiToken = this.ApiTokens[0];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.ErrorMessage = ex.Message;
+                }
+                finally
+                {
+                    this.ViewIsBusy = false;
+                    this.BusyMessage = "";
+                }
+            }
+            else
+            {
+                this.TryClose(true);
+            }
         }
 
         public bool CanOK { get { return this.SelectedApiToken != null; } }
@@ -137,5 +175,24 @@ namespace HockeyApp.AppLoader.ViewModels
         }
         #endregion
 
+    }
+
+    public class CreateNewApiToken : ApiToken
+    {
+        public override string Token
+        {
+            get
+            {
+                return "";
+            }
+        }
+        public override string NameToDisplay { get { return "create new API token..."; } }
+        public override string RightsDisplay
+        {
+            get
+            {
+                return "";
+            }
+        }
     }
 }

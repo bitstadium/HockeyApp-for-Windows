@@ -34,5 +34,28 @@ namespace HockeyApp.AppLoader.Views
                 vm.Password = txtPassword.Password;
             }
         }
+
+        public void HandleListViewDoubleClick(object sender, object args)
+        {
+            LookupApiTokenViewModel vm = this.DataContext as LookupApiTokenViewModel;
+            if (vm != null && vm.CanOK)
+            {
+                vm.OK();
+            }
+        }
+
+
+        private void lvApiTokens_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.lvApiTokens.Items.Count > 0)
+            {
+                object item = this.lvApiTokens.Items[this.lvApiTokens.Items.Count - 1];
+                var element = this.lvApiTokens.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+                if (element != null)
+                {
+                    element.BringIntoView();
+                }
+            }
+        }
     }
 }
