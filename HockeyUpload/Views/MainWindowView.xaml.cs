@@ -23,6 +23,16 @@ namespace HockeyApp.AppLoader.Views
         public MainWindowView()
         {
             InitializeComponent();
+            this.MyFlyout.IsOpenChanged += MyFlyout_IsOpenChanged;
+        }
+
+        void MyFlyout_IsOpenChanged(object sender, EventArgs e)
+        {
+            if (this.MyFlyout.IsOpen)
+            {
+                this.MyFlyout.Width = this.Width - 125;
+            }
+            
         }
 
       

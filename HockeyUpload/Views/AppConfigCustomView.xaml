@@ -16,10 +16,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <TextBlock Text="Regular expression" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,0"/>
+        <TextBlock Text="Reg Exp" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0"/>
         <TextBox x:Name="RegularExpression" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"  Margin="2"/>
         
-        <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap">
+        <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" TextWrapping="Wrap">
             <Run>
             Regular Expression for matching a filename with the corresponding app. The regular expression is tested for the whole path in the command line argument when calling HockeyUploader - except for the file extension (*.zip, *.msi).
             </Run>

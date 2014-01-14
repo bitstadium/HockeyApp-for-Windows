@@ -12,6 +12,7 @@ using HockeyApp.AppLoader.Extensions;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace HockeyApp.AppLoader.ViewModels
 {
@@ -96,10 +97,11 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        private async Task RefreshApps()
+        public async Task RefreshApps()
         {
+            Exception exThrown = null;
             var wm = Caliburn.Micro.IoC.Get<IWindowManager>();
-            wm.ShowBusyView("Loading Apps...");
+            ProgressDialogController pdc = await  wm.ShowProgressAsync("Loading...", "Please wait - we are loading you apps...");
             try
             {
                 AppInfoEnvelope envelope = await AppInfoEnvelope.Load(this._selectedUserConfiguration.UserConfiguration);
@@ -109,7 +111,7 @@ namespace HockeyApp.AppLoader.ViewModels
                 {
                     foreach (AppInfo current in envelope.Apps)
                     {
-                        list.Add(new AppConfigViewModel(current));
+                        list.Add(new AppConfigViewModel(current, this.SelectedUserConfiguration.UserConfiguration));
                     }
                 }
 
@@ -122,13 +124,20 @@ namespace HockeyApp.AppLoader.ViewModels
             }
             catch (Exception ex)
             {
-                wm.ShowMetroMessageBox(ex.Message);
-                throw;
+                exThrown = ex;
             }
-            finally
+            await pdc.CloseAsync();
+
+            var mySettings = new MetroDialogSettings()
             {
-                wm.HideBusyView();
+                AffirmativeButtonText = "OK",
+            };
+            if (exThrown != null)
+            {
+                await wm.ShowMessageAsync("Error", "An error occurred:\n" + exThrown.Message, MessageDialogStyle.Affirmative, mySettings);
+                throw exThrown;
             }
+
         }
     }
 }

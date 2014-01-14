@@ -42,7 +42,7 @@ namespace HockeyUploaderConsole
             System.Configuration.KeyValueConfigurationCollection col = tmp.AppSettings.Settings;
 
 
-            HockeyApp.AppLoader.Model.Configuration c = HockeyApp.AppLoader.Model.Configuration.Instance;
+            HockeyApp.AppLoader.Model.ConfigurationStore c = HockeyApp.AppLoader.Model.ConfigurationStore.Instance;
             if (Environment.CommandLine.ToUpper().Contains("/HELP"))
             {
                 HockeyApp.AppLoader.Model.CommandLineArgs.WriteHelp(Console.Out, "HOCH");

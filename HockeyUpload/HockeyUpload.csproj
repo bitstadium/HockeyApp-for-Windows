@@ -76,9 +76,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HockeySDK.Core.2.0.2-beta\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.0.0.999, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MahApps.Metro, Version=0.12.0.20, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MahApps.Metro.0.11.1.21-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.12.0.20-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,7 +104,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.0.12.0.20-ALPHA\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -132,7 +134,7 @@
     <Compile Include="Model\AppInfo.cs" />
     <Compile Include="Model\AppInfoEnvelope.cs" />
     <Compile Include="Model\CommandLineArgs.cs" />
-    <Compile Include="Model\Configuration.cs" />
+    <Compile Include="Model\ConfigurationStore.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\UserConfiguration.cs" />
     <Compile Include="PlatformStrategies\AppInfoMatcher.cs" />
@@ -150,7 +152,10 @@
     <Compile Include="Util\FeedbackToken.cs" />
     <Compile Include="Util\GravatarHelper.cs" />
     <Compile Include="Util\HockeyAppLogger.cs" />
+    <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\SortableListView.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\AddUserConfigurationViewModel.cs" />
     <Compile Include="ViewModels\AppConfigAndroidViewModel.cs" />
     <Compile Include="ViewModels\AppConfigCustomViewModel.cs" />
     <Compile Include="ViewModels\AppConfigWindowsViewModel.cs" />
@@ -159,12 +164,19 @@
     <Compile Include="ViewModels\ApplicationsViewModel.cs" />
     <Compile Include="ViewModels\AppConfigViewModel.cs" />
     <Compile Include="ViewModels\ConfigurationContentViewModel.cs" />
+    <Compile Include="ViewModels\GeneralConfigurationViewModel.cs" />
     <Compile Include="ViewModels\InitialConfigurationViewModel.cs" />
     <Compile Include="ViewModels\LookupApiTokenViewModel.cs" />
     <Compile Include="ViewModels\NotSupportedPlatformViewModel.cs" />
     <Compile Include="ViewModels\PlatformDependendViewModel.cs" />
     <Compile Include="ViewModels\UploadDialogViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddUserConfigurationView.xaml.cs">
+      <DependentUpon>AddUserConfigurationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AppConfigAndroidView.xaml.cs">
       <DependentUpon>AppConfigAndroidView.xaml</DependentUpon>
     </Compile>
@@ -191,6 +203,9 @@
     </Compile>
     <Compile Include="Views\Converters\BooleanNotConverter.cs" />
     <Compile Include="Views\Converters\MarkUpConverter.cs" />
+    <Compile Include="Views\GeneralConfigurationView.xaml.cs">
+      <DependentUpon>GeneralConfigurationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InitialConfigurationView.xaml.cs">
       <DependentUpon>InitialConfigurationView.xaml</DependentUpon>
     </Compile>
@@ -239,6 +254,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddUserConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AppConfigAndroidView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -271,6 +294,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GeneralConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\InitialConfigurationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -300,6 +327,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MyColors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MyIcons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -370,6 +401,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="hockey_logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\android.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CustomPlatform.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\windowsphone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\apple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IOS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\windows.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

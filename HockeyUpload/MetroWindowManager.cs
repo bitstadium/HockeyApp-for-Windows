@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-
+using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
 namespace HockeyApp.AppLoader
 {
     public class MetroWindowManager : WindowManager

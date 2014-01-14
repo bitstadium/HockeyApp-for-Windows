@@ -3,44 +3,79 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
-        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="HockeyApp" Icon="/HockeyUpload;component/Resources/hockey_logo.ico" 
-        Width="{Binding WindowWidth,Mode=TwoWay}"
-        Height="{Binding WindowHeight, Mode=TwoWay}"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        Icon="/HockeyUpload;component/Resources/hockey_logo.ico" 
+        
         WindowStartupLocation="CenterScreen"
+        ShowTitleBar="False"
+        ShowWindowCommandsOnTop="False"
+        BorderBrush="LightGray" BorderThickness="1"
         ShowMaxRestoreButton="{Binding IsDialog, Converter={StaticResource BooleanNotConverter}}">
-   
-    <Controls:MetroWindow.GlowBrush>
-        <SolidColorBrush Color="{DynamicResource AccentColor}" />
-    </Controls:MetroWindow.GlowBrush>
+
+    <!--
+    Width="{Binding WindowWidth,Mode=TwoWay}"
+        Height="{Binding WindowHeight, Mode=TwoWay}"
+    -->
+    <i:Interaction.Behaviors>
+        <Behaviours:BorderlessWindowBehavior AutoSizeToContent="True"/>
+    </i:Interaction.Behaviors>
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary Source="MyIcons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <!--
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <Button Content="SETTINGS" cal:Message.Attach="OpenSettings" Visibility="{Binding IsDialog, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
-            <Button Content="FEEDBACK" cal:Message.Attach="OpenFeedbackView" Visibility="{Binding IsDialog, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+            <Menu>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=ToolMenuIcon}" Width="15"/>
+                            <TextBlock Text="configure" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem Header="General" cal:Message.Attach="[Event Click] = [Action ShowGeneralConfigurationFlyout]"/>
+                    <MenuItem Header="Add new configuration..." cal:Message.Attach="[Event Click] = [Action ShowAddUserConfigurationFlyout]"/>
+                </MenuItem>
+                
+                <MenuItem cal:Message.Attach="[Event Click] = [Action ShowFeedbackFlyout]">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=FeedbackIcon}" Width="15"/>
+                            <TextBlock Text="feedback" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem cal:Message.Attach="[Event Click] = [Action ShowAboutFlyout]">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=AboutIcon}" Width="15"/>
+                            <TextBlock Text="about" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
-    -->
-    
+
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout IsOpen="{Binding IsFlyoutOpen}" Position="Right" IsModal="True" x:Name="MyFlyout" Header="{Binding ActiveFlyoutContent.DisplayName}">
+                <Grid>
+                    <ContentControl cal:View.Model="{Binding ActiveFlyoutContent}"/>
+                </Grid>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+
+
     <Grid>
-        <ContentControl cal:View.Model="{Binding ActiveContent}"/>
-        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Background="Gray" Opacity="0.7" 
-                Visibility="{Binding Path=IsOverlayVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <Grid  Background="{StaticResource LightGrayHalfOpacityBrush}" Visibility="{Binding ViewIsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <mah:ProgressRing IsActive="{Binding ViewIsBusy}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock x:Name="BusyMessage" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
-            </StackPanel>
-        </Grid>
+        <ContentControl Margin="0,40,0,20" cal:View.Model="{Binding ActiveContent}" Grid.Row="1"/>
     </Grid>
 </Controls:MetroWindow>

@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HockeyApp.AppLoader.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ThreadTokens" Type="System.String" Scope="User">
+    <Setting Name="ThreadTokens" Provider="HockeyApp.AppLoader.Util.CustomUserSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Configuration" Type="System.String" Scope="User">

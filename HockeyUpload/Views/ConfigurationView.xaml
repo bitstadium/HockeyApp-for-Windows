@@ -22,22 +22,7 @@
                     <TextBlock Text="General" FontSize="16"/>
                 </DataTemplate>
             </TabItem.HeaderTemplate>
-            <Grid Margin="10,10,10,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="25"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="225"/>
-                    <ColumnDefinition Width="40"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Path to aapt (Android):" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                <TextBox Text="{Binding PathToAAPT}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                <Button Content="..." x:Name="OpenAPPTFile" Grid.Row="1" Grid.Column="2" Margin="3,0,0,0"/>
-            </Grid>
+            
         </TabItem>
         <TabItem Header="Accounts">
             <TabItem.HeaderTemplate>

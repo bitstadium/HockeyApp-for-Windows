@@ -16,32 +16,18 @@ namespace HockeyApp.AppLoader.ViewModels
             this._app = appInfo;
         }
 
-
-        private bool _isMandatory = false;
         public bool IsMandatory
         {
             get
             {
-                return this._isMandatory;
+                return this._app.DefaultIsMandatory;
             }
             set
             {
-                this._isMandatory = value;
-                this.WasChanged = true;
-                NotifyOfPropertyChange(() => this.IsMandatory);
+                this._app.DefaultIsMandatory = value;
+                base.Save();
             }
         }
 
-        public override void Save()
-        {
-            this._app.DefaultIsMandatory = this.IsMandatory;
-            this.WasChanged = false;
-        }
-
-        public override void Reset()
-        {
-            this.IsMandatory = this._app.DefaultIsMandatory;
-            this.WasChanged = false;
-        }
     }
 }

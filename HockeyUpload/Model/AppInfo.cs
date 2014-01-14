@@ -185,10 +185,27 @@ namespace HockeyApp.AppLoader.Model
 
         #region Upload
 
-       
 
+        public string AppImage { get; private set; }
+        public async Task LoadAppIcon(UserConfiguration uc)
+        {
+            
+            HttpWebRequest webRequest = HttpWebRequest.CreateHttp(uc.ApiBase + "apps/" + this.PublicID + "?format=png");
 
+            webRequest.Method = WebRequestMethods.Http.Get;
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.UserAgent = "HockeyAppLoader";
+            webRequest.Headers.Add("X-HockeyAppToken", uc.UserToken);
 
+            try
+            {
+                WebResponse response = await webRequest.GetResponseAsync();
+                Stream stream = response.GetResponseStream();
+                this.AppImage = ConfigurationStore.Instance.WriteFileToSettingsFolder(stream, this.PublicID + ".png");
+                stream.Close();
+            }
+            catch { }
+        }
 
         #endregion
 

@@ -13,24 +13,6 @@ namespace HockeyApp.AppLoader.ViewModels
             
         }
 
-        public override void Save()
-        {
-            
-        }
 
-        public override bool CanSave
-        {
-            get { return true; }
-        }
-
-        public override void Reset()
-        {
-            
-        }
-
-        public override bool CanReset
-        {
-            get { return true; }
-        }
     }
 }

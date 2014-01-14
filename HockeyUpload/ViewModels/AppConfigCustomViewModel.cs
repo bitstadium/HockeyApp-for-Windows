@@ -16,30 +16,15 @@ namespace HockeyApp.AppLoader.ViewModels
         }
 
 
-        private string _regularExpression = "";
         public string RegularExpression
         {
-            get { return this._regularExpression; }
+            get { return this._app.RegularExpression; }
             set
             {
-                this._regularExpression = value;
-                this.WasChanged = true;
-                NotifyOfPropertyChange(() => this.RegularExpression);
+                this._app.RegularExpression = value;
+                base.Save();
             }
         }
 
-        public override void Save()
-        {
-            this._app.RegularExpression = this.RegularExpression;
-            this.WasChanged = false;
-        }
-
-        public override void Reset()
-        {
-            this.RegularExpression = this._app.RegularExpression;
-            this.WasChanged = false;
-        }
-
-      
     }
 }

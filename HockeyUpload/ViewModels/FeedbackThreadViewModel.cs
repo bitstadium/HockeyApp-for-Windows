@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using HockeyApp.AppLoader.Extensions;
+using MahApps.Metro.Controls.Dialogs;
 namespace HockeyApp.AppLoader.ViewModels
 {
     public class FeedbackThreadViewModel:Screen
@@ -36,7 +37,8 @@ namespace HockeyApp.AppLoader.ViewModels
         public async Task<bool> LoadThread(string token)
         {
             IWindowManager wm = IoC.Get<IWindowManager>();
-            wm.ShowBusyView("Loading Feedbacks...");
+            Exception exThrown = null;
+            ProgressDialogController pdc = await wm.ShowProgressAsync("Loading...", "Please wait. We are loading your feedbacks...");
             try
             {
                 this.FeedbackThread = await HockeyClientWPF.Instance.OpenFeedbackThreadAsync(token);
@@ -55,11 +57,12 @@ namespace HockeyApp.AppLoader.ViewModels
             }
             catch (Exception ex)
             {
-                wm.ShowBusyView("An error ocurred:\n" + ex.Message);
+                exThrown = ex;
             }
-            finally
+            await pdc.CloseAsync();
+            if (exThrown != null)
             {
-                wm.HideBusyView();
+                await wm.ShowSimpleMessageAsync("Error", "An error occurred while loading feedbacks:\n" + exThrown.Message);
             }
             return this.FeedbackThread != null;
         }
@@ -210,7 +213,8 @@ namespace HockeyApp.AppLoader.ViewModels
             bool wasNewThread = this._fbThreadVM.IsNewThread;
             IFeedbackThread fbThread = this._fbThreadVM.FeedbackThread;
             IWindowManager wm = IoC.Get<IWindowManager>();
-            wm.ShowBusyView("Submitting...");
+            Exception exThrown = null;
+            ProgressDialogController pdc = await wm.ShowProgressAsync("Submitting...", "We are submitting your feedback...");
             try
             {
                 IFeedbackMessage msg = await fbThread.PostFeedbackMessageAsync(this.Message, this.EMail, this.Subject, this.Username);
@@ -232,13 +236,13 @@ namespace HockeyApp.AppLoader.ViewModels
             }
             catch (Exception ex)
             {
-                wm.ShowMetroMessageBox("An error ocurred:\n" + ex.Message);
+                exThrown = ex;   
             }
-            finally
+            await pdc.CloseAsync();
+            if (exThrown != null)
             {
-                wm.HideBusyView();
+                wm.ShowSimpleMessageAsync("Error", "An error ocurred while submitting your feedback:\n" + exThrown.Message);
             }
-            
         }
 
         public bool CanSubmit

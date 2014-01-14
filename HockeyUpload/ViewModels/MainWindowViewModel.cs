@@ -8,6 +8,8 @@ using System.ComponentModel.Composition;
 using HockeyApp.AppLoader.Model;
 using System.Collections.ObjectModel;
 using System.Windows;
+using MahApps.Metro.Controls;
+
 namespace HockeyApp.AppLoader.ViewModels
 {
     [Export(typeof(MainWindowViewModel))]
@@ -26,56 +28,14 @@ namespace HockeyApp.AppLoader.ViewModels
             this.SetDefaultView();
         }
 
-
-        #region MessageBox / BusyView
-        private int _overlayDependencies;
-        public void ShowOverlay()
-        {
-            _overlayDependencies++;
-            NotifyOfPropertyChange(() => IsOverlayVisible);
-        }
-
-        public void HideOverlay()
-        {
-            _overlayDependencies--;
-            NotifyOfPropertyChange(() => IsOverlayVisible);
-        }
-
-        public bool IsOverlayVisible
-        {
-            get { return _overlayDependencies > 0; }
-        }
-
-
-        private bool _viewIsBusy = false;
-        public bool ViewIsBusy
-        {
-            get { return _viewIsBusy; }
-            set
-            {
-                _viewIsBusy = value;
-                NotifyOfPropertyChange(() => ViewIsBusy);
-            }
-        }
-
-
-
-        private string _busyMessage = "";
-        public string BusyMessage
-        {
-            get { return this._busyMessage; }
-            set
-            {
-                this._busyMessage = value;
-                NotifyOfPropertyChange(() => BusyMessage);
-            }
-        }       
-        #endregion
+     
+  
 
         private void SetDefaultView()
         {
             this.ActiveContent = _defaultContent;
         }
+
         private Screen _activeContent = null;
         public Screen ActiveContent
         {
@@ -87,57 +47,69 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        #region Appearance
-        private bool _isDialog = false;
-        public bool IsDialog
-        {
-            get { return this._isDialog; }
-            set
-            {
-                this._isDialog = value;
-
-                if (this.IsDialog)
-                {
-                    this.WindowState = System.Windows.WindowState.Normal;
-                    this.WindowWidth = 600;
-                    this.WindowHeight = 500;
-                }
-                else
-                {
-                    
-                    this.WindowWidth = 1024;
-                    this.WindowHeight = 768;
-                }
-
-                NotifyOfPropertyChange("");
-            }
-        }
-
-        public double WindowWidth { get; set; }
-        public double WindowHeight{get;set;}
-        public WindowState WindowState{get;set;}
-
-        #endregion
 
         #region Commands
-        public void OpenSettings(){
-            ConfigurationViewModel vm = IoC.Get<ConfigurationViewModel>();
-            vm.Closed += delegate(object sender, EventArgs args)
+
+        private bool _isFlyoutOpen = false;
+        public bool IsFlyoutOpen
+        {
+            get
             {
-                this.SetDefaultView();
-            };
-            this.ActiveContent = vm;
+                return this._isFlyoutOpen;
+            }
+            set
+            {
+                this._isFlyoutOpen = value;
+                NotifyOfPropertyChange(() => this.IsFlyoutOpen);
+            }
+        }
+        private ViewModelBase _activeFlyoutContent = null;
+        public ViewModelBase ActiveFlyoutContent
+        {
+            get
+            {
+                return this._activeFlyoutContent;
+            }
+            set
+            {
+                this._activeFlyoutContent = value;
+                NotifyOfPropertyChange(() => this.ActiveFlyoutContent);
+            }
+        }
+        public void ShowFeedbackFlyout(){
+            FeedbackViewModel vm = new FeedbackViewModel();
+            this.ActiveFlyoutContent = vm;
+            this.IsFlyoutOpen = true;
         }
 
-        public void OpenFeedbackView()
+        public void ShowConfigurationFlyout()
         {
-            FeedbackViewModel vm = new FeedbackViewModel();
-            vm.Closed += delegate(object sender, EventArgs args)
-            {
-                this.SetDefaultView();
-            };
-            this.ActiveContent = vm;
+            ConfigurationViewModel vm = new ConfigurationViewModel();
+            this.ActiveFlyoutContent = vm;
+            this.IsFlyoutOpen = true;
         }
+        
+        public void ShowAboutFlyout()
+        {
+            AboutViewModel vm = new AboutViewModel();
+            this.ActiveFlyoutContent = vm;
+            this.IsFlyoutOpen = true;
+        }
+
+        public void ShowGeneralConfigurationFlyout()
+        {
+            GeneralConfigurationViewModel vm = new GeneralConfigurationViewModel();
+            this.ActiveFlyoutContent = vm;
+            this.IsFlyoutOpen = true;
+        }
+
+        public void ShowAddUserConfigurationFlyout()
+        {
+            AddUserConfigurationViewModel vm = new AddUserConfigurationViewModel();
+            this.ActiveFlyoutContent = vm;
+            this.IsFlyoutOpen = true;
+        }
+        
         #endregion
     }
 }

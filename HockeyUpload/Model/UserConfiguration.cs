@@ -13,7 +13,7 @@ namespace HockeyApp.AppLoader.Model
     public class UserConfiguration
     {
         public static UserConfiguration CreateNew(string configurationName){
-            Configuration config = IoC.Get<Configuration>();
+            ConfigurationStore config = IoC.Get<ConfigurationStore>();
             if (config.UserConfigurations.Any(p=>p.ConfigurationName.Equals(configurationName))){
                 throw new Exception("Configuration name already in use!");
             }
@@ -22,14 +22,14 @@ namespace HockeyApp.AppLoader.Model
             return newConfig;
         }
 
-        private Configuration _configuration = null;
-        private Configuration configuration
+        private ConfigurationStore _configuration = null;
+        private ConfigurationStore configuration
         {
             get
             {
                 if (this._configuration == null)
                 {
-                    this._configuration = IoC.Get<Configuration>();
+                    this._configuration = IoC.Get<ConfigurationStore>();
                 }
                 return this._configuration;
             }
@@ -44,6 +44,7 @@ namespace HockeyApp.AppLoader.Model
 
         [DataMember]
         public string ConfigurationName { get; private set; }
+
         [DataMember]
         public string UserToken { get; set; }
         [DataMember]

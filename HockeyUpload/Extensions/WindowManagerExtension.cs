@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using HockeyApp.AppLoader.ViewModels;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,43 +13,26 @@ namespace HockeyApp.AppLoader.Extensions
 {
     public static class WindowManagerExtensions
     {
-        public static MessageBoxResult ShowMetroMessageBox(this IWindowManager @this, string message, string title, MessageBoxButton buttons)
-        {
-            MessageBoxResult retval;
-            var shellViewModel = Caliburn.Micro.IoC.Get<MainWindowViewModel>();
+        
 
-            try
+        public static async Task<ProgressDialogController> ShowProgressAsync(this IWindowManager windowManager, string title, string message, bool isCancelable=false, MetroDialogSettings settings = null){
+            MetroWindow mw = Application.Current.MainWindow as MetroWindow;
+            return  await mw.ShowProgressAsync(title, message, isCancelable, settings);
+        }
+
+        public static async Task<MessageDialogResult> ShowMessageAsync(this IWindowManager @this, string title, string message, MessageDialogStyle style, MetroDialogSettings settings)
+        {
+            MetroWindow mw = Application.Current.MainWindow as MetroWindow;
+            return await mw.ShowMessageAsync(title, message, style, settings);
+        }
+
+        public async static Task<MessageDialogResult> ShowSimpleMessageAsync(this IWindowManager @this, string title, string message)
+        {
+            MetroDialogSettings settings = new MetroDialogSettings()
             {
-                shellViewModel.ShowOverlay();
-                var model = new MetroMessageBoxViewModel(message, title, buttons);
-                @this.ShowDialog(model);
-
-                retval = model.Result;
-            }
-            finally
-            {
-                shellViewModel.HideOverlay();
-            }
-
-            return retval;
-        }
-
-        public static void ShowMetroMessageBox(this IWindowManager @this, string message)
-        {
-            @this.ShowMetroMessageBox(message, "System Message", MessageBoxButton.OK);
-        }
-
-        public static void ShowBusyView(this IWindowManager @this, string busyMessage="")
-        {
-            var shellViewModel = Caliburn.Micro.IoC.Get<MainWindowViewModel>();
-            shellViewModel.BusyMessage = busyMessage;
-            shellViewModel.ViewIsBusy = true;
-        }
-
-        public static void HideBusyView(this IWindowManager @this)
-        {
-            var shellViewModel = Caliburn.Micro.IoC.Get<MainWindowViewModel>();
-            shellViewModel.ViewIsBusy = false;
+                AffirmativeButtonText = "OK"
+            };
+            return await @this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, settings);
         }
     }
 }

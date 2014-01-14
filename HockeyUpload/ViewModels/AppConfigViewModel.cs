@@ -8,6 +8,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using HockeyApp.AppLoader.Extensions;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace HockeyApp.AppLoader.ViewModels
 {
@@ -15,26 +17,17 @@ namespace HockeyApp.AppLoader.ViewModels
     public class AppConfigViewModel:ViewModelBase
     {
         private AppInfo _app;
-        private Configuration _configuration;
-        public AppConfigViewModel(AppInfo app)
+        private ConfigurationStore _configuration;
+        private UserConfiguration _userConfiguration = null;
+        public AppConfigViewModel(AppInfo app, UserConfiguration uc)
         {
-            this._configuration = IoC.Get<Configuration>();
+            this._configuration = IoC.Get<ConfigurationStore>();
+            this._userConfiguration = uc;
             this._app = app;
-            this.ResetValues();
+            Task t = this._app.LoadAppIcon(this._userConfiguration);
+            t.ContinueWith(p => { this.NotifyOfPropertyChange(""); });
         }
 
-        private bool _wasChanged=false;
-        private bool WasChanged
-        {
-            get { return this._wasChanged; }
-            set
-            {
-                this._wasChanged = value;
-                NotifyOfPropertyChange(() => this.WasChanged);
-                NotifyOfPropertyChange(() => this.CanSave);
-                NotifyOfPropertyChange(() => this.CanResetValues);
-            }
-        }
 
         public string AppId { get { return this._app.Id; } }
         public string PublicAppID { get { return this._app.PublicID; } }
@@ -43,40 +36,71 @@ namespace HockeyApp.AppLoader.ViewModels
         public string BundleId { get { return this._app.BundleID; } }
         public AppInfoReleaseType ReleaseType { get { return (AppInfoReleaseType)Int32.Parse(this._app.ReleaseType); } }
 
-        /*
-        private AppInfoReleaseType _selectedReleaseType;
-        public AppInfoReleaseType SelectedReleaseType
-        {
-            get { return this._selectedReleaseType; }
-            set
+
+        public string AppImage { get {
+            string retVal = "";
+            if (string.IsNullOrWhiteSpace(this._app.AppImage))
             {
-                this._selectedReleaseType = value;
-                this.WasChanged = true;
-                NotifyOfPropertyChange(() => this.SelectedReleaseType);
+                retVal = "pack://application:,,,/Resources/NoIcon.png";
+            }
+            else
+            {
+                retVal = this._app.AppImage;
+            }
+            return retVal;
+        } }
+
+        public string PlatformIcon
+        {
+            get
+            {
+                string retVal = "";
+                switch (this._app.Platform)
+                {
+                    case AppInfoPlatforms.None:
+                        break;
+                    case AppInfoPlatforms.WindowsPhone:
+                        retVal = "pack://application:,,,/Resources/windowsphone.png";
+                        break;
+                    case AppInfoPlatforms.MacOS:
+                        retVal = "pack://application:,,,/Resources/apple.png";
+                        break;
+                    case AppInfoPlatforms.Android:
+                        retVal = "pack://application:,,,/Resources/android.png";
+                        break;
+                    case AppInfoPlatforms.iOS:
+                        retVal = "pack://application:,,,/Resources/ios.png";
+                        break;
+                    case AppInfoPlatforms.Windows:
+                        retVal = "pack://application:,,,/Resources/windows.png";
+                        break;
+                    case AppInfoPlatforms.Custom:
+                        retVal = "pack://application:,,,/Resources/CustomPlatform.png";
+                        break;
+                    default:
+                        break;
+                }
+                return retVal;
             }
         }
-         */
 
-        private AppInfoStatusType _selectedStatus;
         public AppInfoStatusType SelectedStatus
         {
-            get { return this._selectedStatus; }
+            get { return (AppInfoStatusType)this._app.DefaultStatusType; }
             set
             {
-                this._selectedStatus = value;
-                this.WasChanged = true;
-                NotifyOfPropertyChange(() => this.SelectedStatus);
+                this._app.DefaultStatusType = (int)this.SelectedStatus;
+                this.SaveAppConfig();
             }
         }
-        private AppInfoNotifyType _selectedNotify;
+        
         public AppInfoNotifyType SelectedNotify
         {
-            get { return this._selectedNotify; }
+            get { return (AppInfoNotifyType)this._app.DefaultNotifyType; }
             set
             {
-                this._selectedNotify = value;
-                this.WasChanged = true;
-                NotifyOfPropertyChange(() => this.SelectedNotify);
+                this._app.DefaultNotifyType = (int)value;
+                this.SaveAppConfig();
             }
         }
 
@@ -88,39 +112,15 @@ namespace HockeyApp.AppLoader.ViewModels
                 if (this._platformDependendData == null)
                 {
                     this._platformDependendData = PlatformDependendConfigurationStrategyFactory.GetConfigurationViewModel(this._app);
-                    this._platformDependendData.PropertyChanged += delegate(object sender, PropertyChangedEventArgs args)
-                    {
-                        this.NotifyOfPropertyChange("");
-                    };
                 }
                 return this._platformDependendData;
             }
         }
 
-        #region Commands
-        public void Save()
+        protected void SaveAppConfig()
         {
-            //this._app.DefaultReleaseType = (int)this.SelectedReleaseType;
-            this._app.DefaultStatusType = (int)this.SelectedStatus;
-            this._app.DefaultNotifyType = (int)this.SelectedNotify;
-            this.PlatformDependendData.Save();
-            this._configuration.Save();
-            this.WasChanged = false;
+            ConfigurationStore.Instance.Save();
         }
-
-        public bool CanSave { get { return this.WasChanged || this.PlatformDependendData.CanSave; } }
-
-        public void ResetValues()
-        {
-            //this.SelectedReleaseType = (AppInfoReleaseType)this._app.DefaultReleaseType;
-            this.SelectedStatus = (AppInfoStatusType) this._app.DefaultStatusType;
-            this.SelectedNotify = (AppInfoNotifyType)this._app.DefaultNotifyType;
-            this.PlatformDependendData.Reset();
-            this.WasChanged = false;
-        }
-
-        public bool CanResetValues { get { return this.WasChanged || this.PlatformDependendData.CanSave; } }
-        #endregion
 
     }
 }

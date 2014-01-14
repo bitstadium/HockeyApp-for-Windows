@@ -45,6 +45,7 @@ namespace HockeyApp.AppLoader.Model
             return envelope;
         }
 
+
         public AppInfoEnvelope() {
         }
 

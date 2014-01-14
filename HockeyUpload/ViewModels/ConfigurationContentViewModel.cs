@@ -9,7 +9,7 @@ namespace HockeyApp.AppLoader.ViewModels
 {
     public class ConfigurationContentViewModel:ViewModelBase
     {
-        
+        //TODO: Rausschmeißen
         public ConfigurationContentViewModel()
         {
             this.AppsView = IoC.Get<ApplicationsViewModel>();

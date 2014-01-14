@@ -15,11 +15,11 @@ namespace HockeyApp.AppLoader.ViewModels
 
     public class ConfigurationViewModel:ViewModelBase
     {
-        private Configuration _configuration = null;
+        private ConfigurationStore _configuration = null;
 
         public ConfigurationViewModel()
         {
-            this._configuration = IoC.Get<Configuration>();
+            this._configuration = IoC.Get<ConfigurationStore>();
             this.Configurations = new ObservableCollection<UserConfigurationViewModel>();
             foreach (UserConfiguration uc in this._configuration.UserConfigurations)
             {
@@ -44,7 +44,8 @@ namespace HockeyApp.AppLoader.ViewModels
             {
                 if (this._selectedUserConfiguration != null && this._selectedUserConfiguration.WasChanged)
                 {
-
+                    //TODO
+                    /*
                     if (IoC.Get<IWindowManager>()
                         .ShowMetroMessageBox("Configuration was changed! Continue without saving?", ""
                         , System.Windows.MessageBoxButton.OKCancel) == System.Windows.MessageBoxResult.OK)
@@ -56,6 +57,7 @@ namespace HockeyApp.AppLoader.ViewModels
                         }
                         this._selectedUserConfiguration = value;
                     }
+                     */
                 }
                 else if (this._selectedUserConfiguration != null && !this._selectedUserConfiguration.WasChanged && this._selectedUserConfiguration.IsNew)
                 {
@@ -70,16 +72,7 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        public string PathToAAPT
-        {
-            get { return HockeyApp.AppLoader.Properties.Settings.Default.AAPTPath; }
-            set
-            {
-                HockeyApp.AppLoader.Properties.Settings.Default.AAPTPath = value;
-                HockeyApp.AppLoader.Properties.Settings.Default.Save();
-                NotifyOfPropertyChange(() => this.PathToAAPT);
-            }
-        }
+        
 
         #region Commands
         public void AddNew()
@@ -93,7 +86,9 @@ namespace HockeyApp.AppLoader.ViewModels
         public void Delete()
         {
             IWindowManager wm = IoC.Get<IWindowManager>();
-            System.Windows.MessageBoxResult result = wm.ShowMetroMessageBox("If you delete the configuration, all local data will be lost! Delete anyway?", "Delete configuration?", System.Windows.MessageBoxButton.YesNo);
+            //TODO
+            //System.Windows.MessageBoxResult result = wm.ShowMetroMessageBox("If you delete the configuration, all local data will be lost! Delete anyway?", "Delete configuration?", System.Windows.MessageBoxButton.YesNo);
+            System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.No;
             if (result == System.Windows.MessageBoxResult.Yes)
             {
                 UserConfigurationViewModel selCfg = this.SelectedUserConfiguration;
@@ -111,16 +106,7 @@ namespace HockeyApp.AppLoader.ViewModels
 
         public bool CanDelete { get { return this.SelectedUserConfiguration != null; } }
 
-        public void OpenAPPTFile()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "Executables | *.exe";
-            dlg.Multiselect = false;
-            if (dlg.ShowDialog().GetValueOrDefault(false))
-            {
-                this.PathToAAPT = dlg.FileName;
-            }
-        }
+        
 
         #endregion
     }

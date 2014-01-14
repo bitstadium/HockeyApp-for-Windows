@@ -47,7 +47,7 @@ namespace HockeyApp.AppLoader
 
             batch.AddExportedValue<IWindowManager>(new MetroWindowManager());
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
-            batch.AddExportedValue<Configuration>(Configuration.Instance);
+            batch.AddExportedValue<ConfigurationStore>(ConfigurationStore.Instance);
             batch.AddExportedValue<MainWindowViewModel>(new MainWindowViewModel());
             
             batch.AddExportedValue(container);
@@ -72,6 +72,9 @@ namespace HockeyApp.AppLoader
         protected async override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             _logger.Info("OnStartup");
+
+            base.OnStartup(sender, e);
+
             var shell = IoC.Get<MainWindowViewModel>();
 
             if (Environment.GetCommandLineArgs().Count() > 1)
@@ -121,7 +124,7 @@ namespace HockeyApp.AppLoader
                 try
                 {
                     shell.Init(vm);
-                    shell.IsDialog = true;
+                    //shell.IsDialog = true;
                 }
                 catch (Exception ex)
                 {
@@ -131,12 +134,12 @@ namespace HockeyApp.AppLoader
             }
             else
             {
-                Configuration config = IoC.Get<Configuration>();
+                ConfigurationStore config = IoC.Get<ConfigurationStore>();
                 if (config.UserConfigurations.Count == 0)
                 {
                     InitialConfigurationViewModel initialVM = new InitialConfigurationViewModel();
                     shell.Init(initialVM);
-                    shell.IsDialog = false;
+                    //shell.IsDialog = false;
                     initialVM.Closed += (a, b) =>
                     {
                         if (config.UserConfigurations.Count > 0)
@@ -159,11 +162,10 @@ namespace HockeyApp.AppLoader
                     this.container.ComposeExportedValue<FeedbackViewModel>(new FeedbackViewModel());
                     this.container.ComposeExportedValue<ApplicationsViewModel>(new ApplicationsViewModel());
 
-                    shell.Init(new ConfigurationContentViewModel());
-                    shell.IsDialog = false;
+                    shell.Init(new ApplicationsViewModel());
+                    //shell.IsDialog = false;
                 }
             }
-            base.OnStartup(sender, e);
         }
 
         protected override object GetInstance(Type serviceType, string key)

@@ -24,7 +24,7 @@ namespace HockeyApp.AppLoader.PlatformStrategies
 
         public async Task<List<AppInfo>> GetMatchingApps(CommandLineArgs args)
         {
-            Configuration configuration = Configuration.Instance;
+            ConfigurationStore configuration = ConfigurationStore.Instance;
             this._args=args;
             if (!String.IsNullOrWhiteSpace(args.Accountname))
             {

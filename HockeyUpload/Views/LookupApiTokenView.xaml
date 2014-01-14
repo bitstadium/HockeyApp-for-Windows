@@ -8,7 +8,6 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False"
-        FocusManager.FocusedElement="{Binding ElementName=txtUsername}"
         Height="500" Width="600">
     
     <Controls:MetroWindow.GlowBrush>

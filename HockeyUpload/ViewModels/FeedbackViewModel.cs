@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HockeyApp.AppLoader.Extensions;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace HockeyApp.AppLoader.ViewModels
 {
@@ -14,6 +15,7 @@ namespace HockeyApp.AppLoader.ViewModels
     {
         public FeedbackViewModel()
         {
+            base.DisplayName = "Feedback";
             this.FeedbackThreadList = new ObservableCollection<FeedbackThreadViewModel>();
             loadFeedbackThreads();
         }
@@ -26,10 +28,10 @@ namespace HockeyApp.AppLoader.ViewModels
                 FeedbackThreadViewModel fbThread = new FeedbackThreadViewModel(null);
                 if (await fbThread.LoadThread(token))
                 {
-                    fbThread.DeletedOnServer += delegate(object sender, EventArgs args)
+                    fbThread.DeletedOnServer += async delegate(object sender, EventArgs args)
                     {
-                        IWindowManager wm= IoC.Get<IWindowManager>();
-                        wm.ShowMetroMessageBox("Feedback-Thread was deleted on the server!", "Deleted", System.Windows.MessageBoxButton.OK);
+                        IWindowManager wm = IoC.Get<IWindowManager>();
+                        await wm.ShowSimpleMessageAsync("Deleted", "Feedback-Thread was deleted on the server!");
                         this.FeedbackThreadList.Remove(fbThread);
                     };
                     FeedbackThreadList.Add(fbThread);
@@ -89,10 +91,17 @@ namespace HockeyApp.AppLoader.ViewModels
             this.SelectedFeedbackThread = newThread;
         }
 
-        public void CloseThread()
+        public async void CloseThread()
         {
             IWindowManager wm = IoC.Get<IWindowManager>();
-            if (wm.ShowMetroMessageBox("Thread will be closed and cannot be opened later. Continue anyway?", "Close thread", System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes)
+            MetroDialogSettings settings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "Close thread",
+                NegativeButtonText = "Cancel"
+            };
+
+            if (await wm.ShowMessageAsync("Close thread?", "Thread will be closed and cannot be opened later from the client. Continue anyway?",MessageDialogStyle.AffirmativeAndNegative, settings) 
+                == MessageDialogResult.Affirmative)
             {
                 FeedbackToken.DeleteToken(this.SelectedFeedbackThread.FeedbackThread.Token);
                 int pos = this.FeedbackThreadList.IndexOf(this.SelectedFeedbackThread);

@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:HockeyApp.AppLoader.Model"
              xmlns:extensions="clr-namespace:HockeyApp.AppLoader.Extensions"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,12 +19,14 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -36,37 +38,33 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock FontSize="26" Text="{Binding Title}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Top" Height="35"/>
+        <TextBlock FontSize="24" Text="{Binding Title}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
+
+        <!-- App Information" -->
+        <TextBlock Text="App-Information" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.ColumnSpan="2"/>
         
+        <TextBlock Text="App ID" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
+        <TextBlock Text="{Binding PublicAppID}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
 
-        <TextBlock Text="App ID" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <TextBlock Text="{Binding PublicAppID}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+        <TextBlock Text="Bundle ID" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
+        <TextBlock Text="{Binding BundleId}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
 
-        <TextBlock Text="Bundle ID" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <TextBlock Text="{Binding BundleId}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
+        <TextBlock Text="Platform" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
+        <TextBlock Text="{Binding Path=Platform}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
 
-        <TextBlock Text="Platform" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <TextBlock Text="{Binding Path=Platform}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
+        <TextBlock Text="Release Type" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
+        <TextBlock Text="{Binding ReleaseType}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
+                
+        <!-- DefaultValues -->
+        <TextBlock Text="Default values" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Grid.ColumnSpan="2"/>
 
-        <TextBlock Text="Release Type" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <TextBlock Text="{Binding ReleaseType}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
-        <!--
-        <ComboBox  Margin="2" Grid.Row="4" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoReleaseType}}" SelectedItem="{Binding SelectedReleaseType}"/>
-        -->
-        
-        <TextBlock Text="Default values" Grid.Row="5" Grid.Column="0" VerticalAlignment="Bottom" FontWeight="Bold"/>
+        <TextBlock Text="Status" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
+        <ComboBox Margin="2" Grid.Row="8" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoStatusType}}" SelectedItem="{Binding SelectedStatus}"/>
 
-        <TextBlock Text="Status" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <ComboBox Margin="2" Grid.Row="6" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoStatusType}}" SelectedItem="{Binding SelectedStatus}"/>
+        <TextBlock Text="Notify" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
+        <ComboBox Margin="2" Grid.Row="9" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoNotifyType}}" SelectedItem="{Binding SelectedNotify}"/>
 
-        <TextBlock Text="Notify" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="5,7"/>
-        <ComboBox Margin="2" Grid.Row="7" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoNotifyType}}" SelectedItem="{Binding SelectedNotify}"/>
+        <ContentControl cal:View.Model="{Binding PlatformDependendData}" Grid.Row="10" Grid.ColumnSpan="3" Margin="0,0,0,40" Grid.RowSpan="2"/>
 
-        <ContentControl cal:View.Model="{Binding PlatformDependendData}" Grid.Row="8" Grid.ColumnSpan="2" Margin="0,0,0,40" Grid.RowSpan="2"/>
-
-        <StackPanel Grid.Row="10" Grid.ColumnSpan="3" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button x:Name="ResetValues" Content="Reset" Width="75"/>
-            <Button x:Name="Save" Content="Save" Width="75"/>
-        </StackPanel>
     </Grid>
 </UserControl>

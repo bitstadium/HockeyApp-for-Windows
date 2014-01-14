@@ -215,8 +215,7 @@ public class CustomUserSettingsProvider : SettingsProvider
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HockeyUploader\\user.config");
-                //return Properties.Settings.Default.SettingsKey;
+                return Path.Combine(HockeyAppLoader.App.UserFolder, "user.config");
             }
 
         }

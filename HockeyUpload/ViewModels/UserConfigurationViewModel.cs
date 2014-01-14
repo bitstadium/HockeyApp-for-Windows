@@ -12,11 +12,11 @@ namespace HockeyApp.AppLoader.ViewModels
     public class UserConfigurationViewModel : ViewModelBase, IDataErrorInfo
     {
 
-        private Configuration _configuration;
+        private ConfigurationStore _configuration;
         private UserConfiguration _userConfiguration;
         public UserConfigurationViewModel(UserConfiguration userConfiguration)
         {
-            this._configuration = IoC.Get<Configuration>();
+            this._configuration = IoC.Get<ConfigurationStore>();
             this._userConfiguration = userConfiguration;
             this.Cancel();
         }
@@ -88,6 +88,21 @@ namespace HockeyApp.AppLoader.ViewModels
                 this.NotifyOfPropertyChange(() => this.ConfigurationName);
             }
         }
+
+        private string _userName = "Testuser Name";
+        public string UserName
+        {
+            get
+            {
+                return this._userName;
+            }
+            set
+            {
+                this._userName = value;
+                NotifyOfPropertyChange(() => this.UserName);
+            }
+        }
+
 
         private string _userToken;
         public string UserToken
