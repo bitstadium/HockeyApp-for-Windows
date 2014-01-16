@@ -46,6 +46,9 @@ namespace HockeyApp.AppLoader.Model
         public string ConfigurationName { get; private set; }
 
         [DataMember]
+        public string Username { get; set; }
+
+        [DataMember]
         public string UserToken { get; set; }
         [DataMember]
         private List<AppInfo> _appInfos = new List<AppInfo>();
@@ -54,7 +57,8 @@ namespace HockeyApp.AppLoader.Model
         [DataMember]
         public string ApiBase { get; set; }
 
-
+        [DataMember]
+        public string GravatarHash { get; set; }
         
         public bool IsDefault
         {

@@ -12,35 +12,59 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary Source="MyIcons.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="10,20,10,10" >
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TabControl HorizontalAlignment="Stretch"
-                    Grid.Row="0"
-                    ItemsSource="{Binding FeedbackThreadList}"
-                    SelectedItem="{Binding SelectedFeedbackThread}">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Subject}" FontSize="16"/>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <ContentControl cal:View.Model="{Binding}"/>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button x:Name="RefreshThread" Content="Refresh" Width="80"/>
-            <Button x:Name="CloseThread" Content="Close" Width="80"/>
-            <Button x:Name="NewThread" Content="Add" Width="80"/>
-        </StackPanel>
-            
+        
+        <TextBlock Text="Threads" Grid.Column="0" Grid.Row="0" FontSize="16" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,3,0,0"/>
+        <Menu Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Background="Transparent">
+            <MenuItem cal:Message.Attach="[Event Click] = [Action NewThread]">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource ResourceKey=AddFeedbackThreadIcon}" Width="12" Height="12"/>
+                        <TextBlock Text="add" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem cal:Message.Attach="[Event Click] = [Action CloseThread]">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource ResourceKey=CloseFeedbackThread}" Width="12" Height="12"/>
+                        <TextBlock Text="close" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem cal:Message.Attach="[Event Click] = [Action RefreshThread]">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource ResourceKey=RefreshMenuBlackIcon}" Width="12" Height="12"/>
+                        <TextBlock Text="refresh" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <ListBox ItemsSource="{Binding FeedbackThreadList}"
+                 SelectedItem="{Binding SelectedFeedbackThread}"
+                 Grid.Column="0" Grid.Row="1"
+                 Background="Transparent">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Subject}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ContentControl Grid.Column="1" Grid.Row="1" cal:View.Model="{Binding SelectedFeedbackThread}"/>
     </Grid>
 </UserControl>

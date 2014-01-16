@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -31,13 +32,15 @@ namespace HockeyApp.AppLoader.Util
             return sb.ToString();
         }
 
-        public static async Task<BitmapImage> LoadAvatar(string hash)
+        public static async Task<BitmapImage> LoadGravatar(string hash)
         {
+            if (hash == null) { hash = ""; }
+            
             if (_gravatarCache.ContainsKey(hash))
             {
                 return _gravatarCache[hash];
             }
-
+            
             string url = "http://s.gravatar.com/avatar/" + hash;
 
             BitmapImage bi;
@@ -58,7 +61,14 @@ namespace HockeyApp.AppLoader.Util
                 bi.StreamSource = await sc.ReadAsStreamAsync();
                 bi.EndInit();
                 bi.Freeze();
-                _gravatarCache.Add(hash, bi);
+
+                //because of async loading of all gravatar infos...
+                Monitor.Enter(_gravatarCache);
+                if (!_gravatarCache.ContainsKey(hash))
+                {
+                    _gravatarCache.Add(hash, bi);
+                }
+                Monitor.Exit(_gravatarCache);
             }
             else
             {

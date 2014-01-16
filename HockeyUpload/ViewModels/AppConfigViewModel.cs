@@ -16,6 +16,7 @@ namespace HockeyApp.AppLoader.ViewModels
 
     public class AppConfigViewModel:ViewModelBase
     {
+
         private AppInfo _app;
         private ConfigurationStore _configuration;
         private UserConfiguration _userConfiguration = null;
@@ -25,7 +26,7 @@ namespace HockeyApp.AppLoader.ViewModels
             this._userConfiguration = uc;
             this._app = app;
             Task t = this._app.LoadAppIcon(this._userConfiguration);
-            t.ContinueWith(p => { this.NotifyOfPropertyChange(""); });
+            t.ContinueWith(p => { this.NotifyOfPropertyChange(()=>this.AppImage); });
         }
 
 
@@ -36,7 +37,7 @@ namespace HockeyApp.AppLoader.ViewModels
         public string BundleId { get { return this._app.BundleID; } }
         public AppInfoReleaseType ReleaseType { get { return (AppInfoReleaseType)Int32.Parse(this._app.ReleaseType); } }
 
-
+        
         public string AppImage { get {
             string retVal = "";
             if (string.IsNullOrWhiteSpace(this._app.AppImage))

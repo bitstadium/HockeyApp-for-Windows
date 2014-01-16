@@ -40,7 +40,8 @@
     <Reference Include="Args">
       <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
     </Reference>
-    <Reference Include="HockeyAppPCL">
+    <Reference Include="HockeyAppPCL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HockeySDK.Core.2.0.2-beta\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -55,9 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\HockeyUpload\Properties\Settings.Designer.cs">
-      <Link>Settings.Designer.cs</Link>
-    </Compile>
+    <Compile Include="AsyncUploader.cs" />
     <Compile Include="CrashHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

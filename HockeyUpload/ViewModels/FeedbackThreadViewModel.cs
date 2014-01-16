@@ -70,9 +70,13 @@ namespace HockeyApp.AppLoader.ViewModels
         #region props
         public IFeedbackThread FeedbackThread { get; set; }
         public ObservableCollection<FeedbackMessageViewModel> FeedbackMessages { get; private set; }
-        public virtual object Subject
+        public virtual string Subject
         {
-            get { return this.FeedbackMessages != null && this.FeedbackMessages.Count > 0 ? this.FeedbackMessages.First().Subject : ""; }
+            get{ return this.FeedbackMessages != null && this.FeedbackMessages.Count > 0 ? this.FeedbackMessages.First().Subject : ""; }
+            set
+            {
+                this.FeedbackMessages[0].Subject = value;
+            }
         }
         public bool IsNewThread { get { return this.FeedbackThread != null ? this.FeedbackThread.IsNewThread : true; } }
 
@@ -124,13 +128,16 @@ namespace HockeyApp.AppLoader.ViewModels
 
         protected async Task LoadGravatar(string hash)
         {
-            this.Gravatar = await GravatarHelper.LoadAvatar(hash);
+            this.Gravatar = await GravatarHelper.LoadGravatar(hash);
             //this.Gravatar = GravatarHelper.DefaultGravatar;
         }
 
         #region props
         public virtual string MessageFrom { get { return this._message.Name; } }
         public string CreatedAndVia { get { return "Posted on " + this._message.Created.ToString("dd MMMM yyyy, HH:mm") + " via " + this._message.ViaAsString; } }
+        public string Via { get { return "via " + this._message.ViaAsString; } }
+        public string Created { get { return this._message.Created.ToString("dd MMMM yyyy, HH:mm"); } }
+
         public virtual string Message { get { return this._message.CleanText; } set { } }
         public virtual string Subject { get { return this._message.Subject; } set { } }
         public virtual string EMail{get{return this._message.Email;}set{}}
@@ -241,7 +248,7 @@ namespace HockeyApp.AppLoader.ViewModels
             await pdc.CloseAsync();
             if (exThrown != null)
             {
-                wm.ShowSimpleMessageAsync("Error", "An error ocurred while submitting your feedback:\n" + exThrown.Message);
+                await wm.ShowSimpleMessageAsync("Error", "An error ocurred while submitting your feedback:\n" + exThrown.Message);
             }
         }
 

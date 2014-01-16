@@ -116,8 +116,7 @@ namespace HockeyApp.AppLoader.ViewModels
             catch (Exception ex)
             {
                 IWindowManager wm = IoC.Get<IWindowManager>();
-                //TODO
-                //wm.ShowMetroMessageBox("Error while creating a new version:\n" + ex.Message);
+                Task t = wm.ShowSimpleMessageAsync("Error", "Error while creating a new version:\n" + ex.Message);
             }
             finally
             {

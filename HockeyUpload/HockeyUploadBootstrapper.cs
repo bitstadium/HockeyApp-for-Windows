@@ -18,6 +18,7 @@ using HockeyApp.AppLoader.Util;
 using System.Windows;
 using HockeyApp.AppLoader.PlatformStrategies;
 using System.IO;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace HockeyApp.AppLoader
 {
@@ -66,104 +67,98 @@ namespace HockeyApp.AppLoader
                     return "";
                 });
             
-            HockeyApp.HockeyClientWPF.Instance.SendCrashesNowAsync();
+            //TODO
+            //HockeyApp.HockeyClientWPF.Instance.SendCrashesNowAsync();
         }
 
+
+        private async Task ShowHelp(IWindowManager wm)
+        {
+            StringBuilder sb = new StringBuilder();
+            StringWriter tw = new StringWriter(sb);
+            CommandLineArgs.WriteHelp(tw, "HockeyUpload");
+            await wm.ShowSimpleMessageAsync("Usage", sb.ToString());
+        }
         protected async override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             _logger.Info("OnStartup");
-
-            base.OnStartup(sender, e);
 
             var shell = IoC.Get<MainWindowViewModel>();
 
             if (Environment.GetCommandLineArgs().Count() > 1)
             {
+                shell.PreferredHeight = 495;
+                shell.PreferredWidth = 642;
+                base.OnStartup(sender, e);
+                IWindowManager wm = IoC.Get<IWindowManager>();
+
+                if (Environment.CommandLine.ToUpper().Contains("/HELP"))
+                {
+                    await ShowHelp(wm);
+                    Application.Shutdown();
+                }
+
+
+                ProgressDialogController pdc = await wm.ShowProgressAsync("Matching apps...", "Please wait - we are looking for your app-configuration");
+                
                 CommandLineArgs cmdLineArgs = null;
+                Exception exThrown = null;
                 try
                 {
-                    if (Environment.CommandLine.ToUpper().Contains("/HELP"))
-                    {
-                        throw new Exception();
-                    }
-
                     _logger.Info("Commandline Args=" + Environment.CommandLine);
-                    IWindowManager wm = IoC.Get<IWindowManager>();
-
                     cmdLineArgs = Args.Configuration.Configure<HockeyApp.AppLoader.Model.CommandLineArgs>().CreateAndBind(Environment.GetCommandLineArgs());
                     string errMsg = "";
                     if (!cmdLineArgs.IsValid(out errMsg))
                     {
                         _logger.Warn("Command line args invalid: " + errMsg);
-                        throw new Exception();
+                        throw new Exception(errMsg);
                     }
-                }catch{
-                    StringBuilder sb = new StringBuilder();
-                    StringWriter tw = new StringWriter(sb);
-                    CommandLineArgs.WriteHelp(tw, "HockeyUpload");
-                    MessageBox.Show(sb.ToString(), "Usage");
-                    Application.Shutdown();
-                }
+                    this.container.ComposeExportedValue<CommandLineArgs>(cmdLineArgs);
 
-                this.container.ComposeExportedValue<CommandLineArgs>(cmdLineArgs);
-
-                AppInfoMatcher matcher = new AppInfoMatcher();
-                List<AppInfo> list = await matcher.GetMatchingApps(cmdLineArgs);
-                if (list.Count == 0)
-                {
-                    MessageBox.Show("No matching application found. Please check the configuration information!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Application.Shutdown(-1);
-                }
+                    AppInfoMatcher matcher = new AppInfoMatcher();
+                    List<AppInfo> list = await matcher.GetMatchingApps(cmdLineArgs);
+                    if (list.Count == 0)
+                    {
+                        await pdc.CloseAsync();
+                        await wm.ShowSimpleMessageAsync("Could not find matching apps", "No matching application found. Please check the configuration information!");
+                        Application.Current.Shutdown(-1);
+                        return;
+                    }
 
 
-                UploadDialogViewModel vm = new UploadDialogViewModel(list, matcher.ActiveUserConfiguration);
-                vm.Closed += delegate(object s, EventArgs args)
-                {
-                    Application.Shutdown(0);
-                };
-                try
-                {
+                    UploadDialogViewModel vm = new UploadDialogViewModel(list, matcher.ActiveUserConfiguration);
+                    vm.Closed += delegate(object s, EventArgs args)
+                    {
+                        Application.Shutdown(0);
+                    };
+                    await pdc.CloseAsync();
                     shell.Init(vm);
-                    //shell.IsDialog = true;
+                   
+                }catch(Exception ex){
+                    exThrown = ex;
                 }
-                catch (Exception ex)
+                if (exThrown != null)
                 {
-                    _logger.Error(ex.Message);
-                    MessageBox.Show("Error while loading applications!\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    
+                    await pdc.CloseAsync();
+                    await wm.ShowSimpleMessageAsync("Error", "An exception was thrown:\n" + exThrown.Message);
+                    Application.Shutdown(-1);
                 }
             }
             else
             {
+                shell.PreferredWidth = 1280;
+                shell.PreferredHeight = 800;
+                base.OnStartup(sender, e);
+
                 ConfigurationStore config = IoC.Get<ConfigurationStore>();
-                if (config.UserConfigurations.Count == 0)
-                {
-                    InitialConfigurationViewModel initialVM = new InitialConfigurationViewModel();
-                    shell.Init(initialVM);
-                    //shell.IsDialog = false;
-                    initialVM.Closed += (a, b) =>
-                    {
-                        if (config.UserConfigurations.Count > 0)
-                        {
-                            this.container.ComposeExportedValue<ConfigurationViewModel>(new ConfigurationViewModel());
-                            this.container.ComposeExportedValue<FeedbackViewModel>(new FeedbackViewModel());
-                            this.container.ComposeExportedValue<ApplicationsViewModel>(new ApplicationsViewModel());
-
-                            shell.Init(new ConfigurationContentViewModel());
-                        }
-                        else
-                        {
-                            Application.Shutdown();
-                        }
-                    };
-                }
-                else
-                {
-                    this.container.ComposeExportedValue<ConfigurationViewModel>(new ConfigurationViewModel());
-                    this.container.ComposeExportedValue<FeedbackViewModel>(new FeedbackViewModel());
-                    this.container.ComposeExportedValue<ApplicationsViewModel>(new ApplicationsViewModel());
-
-                    shell.Init(new ApplicationsViewModel());
-                    //shell.IsDialog = false;
+                ApplicationsViewModel avm = new ApplicationsViewModel();
+                
+                
+                shell.Init(avm);
+                
+                if (config.UserConfigurations.Count == 0){
+                    shell.ShowAddUserConfigurationFlyout();
                 }
             }
         }

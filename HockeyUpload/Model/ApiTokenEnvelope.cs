@@ -81,6 +81,10 @@ namespace HockeyApp.AppLoader.Model
         [DataMember(Name = "name")]
         public string Name{get;private set;}
 
+        [DataMember(Name = "gravatar_hash")]
+        public string GravatarHash { get; private set; }
+
+
         [DataMember(Name = "status")]
         public string Status{get;private set;}
         

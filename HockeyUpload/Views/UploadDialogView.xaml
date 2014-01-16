@@ -6,7 +6,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     
     <UserControl.Resources>
         <ResourceDictionary>
@@ -17,15 +17,15 @@
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid Margin="10">
+    <Grid Margin="10,0,10,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Please choose an application" Grid.Row="0"/>
+
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Text="Please choose an application" Grid.Row="0"/>
         <ComboBox Grid.Row="1"
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Center" 
@@ -33,7 +33,7 @@
                   SelectedItem="{Binding SelectedApp}" 
                   DisplayMemberPath="Title"/>
         
-        <ContentControl cal:View.Model="{Binding SelectedApp}" Grid.Row="2"/>
+        <ContentControl cal:View.Model="{Binding SelectedApp}" Grid.Row="2" Margin="0,10,0,0"/>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -61,10 +61,16 @@
                     <!--<TextBlock Text="{Binding UploadPercentage}" HorizontalAlignment="Center"/>-->
                 </Border>
             </Grid>
-            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
+            <Menu Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <!--<StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">-->
+                <MenuItem x:Name="Upload" Header="Upload"/>
+                <MenuItem x:Name="Cancel" Header="Cancel"/>
+                
+                <!--
                 <Button x:Name="Cancel" Content="Cancel" Width="80"/>
                 <Button x:Name="Upload" Content="Upload" Width="80"/>
-            </StackPanel>
+                        -->
+            </Menu>
         </Grid>
         
         <!-- Overlay -->

@@ -18,7 +18,7 @@ namespace HockeyAppLoader
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HockeyUploader");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HockeyUpload");
             }
         }
 

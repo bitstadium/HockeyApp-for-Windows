@@ -8,6 +8,8 @@
     
     <SolidColorBrush Color="#0E63A6" x:Key="BlueButtonBackgroundBrush"/>
     <SolidColorBrush Color="LightGray" Opacity=".8" x:Key="LightGrayHalfOpacityBrush"/>
+    <SolidColorBrush Color="#333D3F" x:Key="TextboxBorderColorDarkTheme"/>
+    
     
     <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="RefreshIcon">
         <Grid>

@@ -28,9 +28,6 @@ namespace HockeyApp.AppLoader.ViewModels
             this.SetDefaultView();
         }
 
-     
-  
-
         private void SetDefaultView()
         {
             this.ActiveContent = _defaultContent;
@@ -82,12 +79,6 @@ namespace HockeyApp.AppLoader.ViewModels
             this.IsFlyoutOpen = true;
         }
 
-        public void ShowConfigurationFlyout()
-        {
-            ConfigurationViewModel vm = new ConfigurationViewModel();
-            this.ActiveFlyoutContent = vm;
-            this.IsFlyoutOpen = true;
-        }
         
         public void ShowAboutFlyout()
         {
@@ -108,8 +99,45 @@ namespace HockeyApp.AppLoader.ViewModels
             AddUserConfigurationViewModel vm = new AddUserConfigurationViewModel();
             this.ActiveFlyoutContent = vm;
             this.IsFlyoutOpen = true;
+
+            vm.Closed += (a, b) =>
+            {
+                this.IsFlyoutOpen = false;
+                if (vm.NewUserConfiguration != null)
+                {
+                    ApplicationsViewModel appVM = this.ActiveContent as ApplicationsViewModel;
+                    if (appVM != null)
+                    {
+                        appVM = new ApplicationsViewModel(vm.NewUserConfiguration);
+                        this.ActiveContent = appVM;
+                    }
+                }
+            };
         }
+
         
+        #endregion
+
+        #region appearance
+        
+        private double _preferredWidth = 100;
+        public double PreferredWidth{get{return this._preferredWidth;}
+            set{this._preferredWidth = value;
+            NotifyOfPropertyChange(()=>this.PreferredWidth);}
+        }
+        private double _preferrendHeight = 100;
+        public double PreferredHeight
+        {
+            get
+            {
+                return this._preferrendHeight;
+            }
+            set
+            {
+                this._preferrendHeight = value;
+                NotifyOfPropertyChange(() => this._preferrendHeight);
+            }
+        }
         #endregion
     }
 }

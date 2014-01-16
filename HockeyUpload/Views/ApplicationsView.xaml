@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:HockeyApp.AppLoader.Views.Converters"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:util="clr-namespace:HockeyApp.AppLoader.Util"
              mc:Ignorable="d" 
-             Width="1280" Height="800"
              d:DesignHeight="800" d:DesignWidth="1280">
 
     <UserControl.Resources>
@@ -15,89 +15,151 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
                 <ResourceDictionary Source="MyIcons.xaml"/>
+                <ResourceDictionary>
+                    <converters:ConfigurableBooleanToVisibilityConverter
+                        x:Key="BooleanToVisibilityConverter" 
+                        True="Visible" 
+                        False="Collapsed" />
+                    <converters:ConfigurableBooleanToVisibilityConverter
+                        x:Key="InvertedBooleanToVisibilityConverter" 
+                        True="Collapsed" 
+                        False="Visible" />
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
     </UserControl.Resources>
     
-    <Grid Margin="20,0,0,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="450"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="20"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="245*"/>
-        </Grid.RowDefinitions>
-        
+    <Grid>
+        <Grid Margin="20,0,0,0" Visibility="{Binding HasConfigurations, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="300*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="245*"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="Configurations" FontFamily="Segoe UI" FontSize="24" Grid.Row="0"/>
-        <ListBox FontFamily="Segoe UI" Grid.Row="1" ItemsSource="{Binding UserConfigurations}" SelectedItem="{Binding SelectedUserConfiguration}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="20"/>
-                        </Grid.RowDefinitions>
-                        <ContentPresenter Content="{StaticResource DefaultUserIcon}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="3"/>
-                        <TextBlock Text="{Binding ConfigurationName}" FontSize="20" Grid.Column="1" Grid.Row="0"/>
-                        <TextBlock Text="{Binding UserName}" FontSize="16" Grid.Column="1" Grid.Row="1"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
 
-        <MenuItem cal:Message.Attach="RefreshApps" Grid.Column="2" Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Right">
-            <MenuItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <ContentPresenter Content="{StaticResource ResourceKey=RefreshMenuIcon}" Width="15"/>
-                    <TextBlock Text="refresh" Margin="5,0,0,0"/>
-                </StackPanel>
-            </MenuItem.Header>
-        </MenuItem>
-        
-        <TextBox Controls:TextboxHelper.Watermark="Quickfilter" 
+            <TextBlock Text="Configurations" FontFamily="Segoe UI" FontSize="24" Grid.Row="0"/>
+            <ListBox x:Name="lstConfigurations" FontFamily="Segoe UI" Grid.Row="1" ItemsSource="{Binding UserConfigurations}" SelectedItem="{Binding SelectedUserConfiguration}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Tag="{Binding DataContext, ElementName=lstConfigurations}" Margin="0,5,0,5" Background="Transparent">
+                            <Grid.ContextMenu>
+                                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Set default"  cal:Message.Attach="SetDefaultConfiguration"/>
+                                    <MenuItem  Header="Delete" cal:Message.Attach="DeleteConfiguration" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="20"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Gravatar}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
+                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Top" Text="{Binding ConfigurationName}" FontSize="16" Grid.Column="1" Grid.Row="0"/>
+                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Bottom" Text="{Binding UserName}" FontSize="12" Grid.Column="1" Grid.Row="1"/>
+                            <ContentControl Content="{StaticResource IsDefaultIcon}" Grid.Column="1" Grid.Row="0" Margin="0,2,6,0"
+                                            Visibility="{Binding IsDefaultConfiguration, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top" Width="15" Height="15"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Menu Grid.Column="2" Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Right">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=ToolMenuIcon}" Width="15"/>
+                            <TextBlock Text="configure" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem Header="General" cal:Message.Attach="[Event Click] = [Action ShowGeneralConfigurationFlyout]"/>
+                    <MenuItem Header="Add Configuration..." cal:Message.Attach="[Event Click] = [Action ShowAddUserConfigurationFlyout]"/>
+                </MenuItem>
+
+                <MenuItem cal:Message.Attach="[Event Click] = [Action ShowFeedbackFlyout]">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=FeedbackIcon}" Width="15"/>
+                            <TextBlock Text="feedback" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem cal:Message.Attach="RefreshApps" >
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource ResourceKey=RefreshMenuWhiteIcon}" Width="15"/>
+                            <TextBlock Text="refresh" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
+            <TextBox Controls:TextboxHelper.Watermark="Quickfilter" 
                  Grid.Column="2" Grid.Row="0"
                  Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" 
                  VerticalAlignment="Bottom" Margin="0,0,0,5"/>
 
-        <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Apps}" IsSynchronizedWithCurrentItem="True">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Margin="3">
+            <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Apps}" IsSynchronizedWithCurrentItem="True">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="4"/>
-                            </Grid.RowDefinitions>
-                            <Image Source="{Binding AppImage}" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-                            <Image Source="{Binding PlatformIcon}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                            <Grid Grid.Column="0" Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="22"/>
+                                    <ColumnDefinition Width="2"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="4"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding AppImage}" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                                <!--
+                                <ContentControl Content="{StaticResource AndroidAppBadgeIcon}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                                -->
+                                <Image Source="{Binding PlatformIcon}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                                
+                            </Grid>
+                            <TextBlock FontSize="16" Grid.Column="1" Text="{Binding Title}" VerticalAlignment="Center"/>
                         </Grid>
-                        <TextBlock FontSize="16" Grid.Column="1" Text="{Binding Title}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <ContentControl Margin="0,10,0,0" cal:View.Model="{Binding Apps.CurrentItem}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
+            <ContentControl Margin="0,10,0,0" cal:View.Model="{Binding Apps.CurrentItem}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
+        </Grid>
+        
+        <Grid Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="0" Grid.RowSpan="2" Visibility="{Binding HasConfigurations, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="24" Text="No configurations available" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Text="Please add a configuration to load app informations" HorizontalAlignment="Center"/>
+                <Menu Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <MenuItem Header="Add new configuration..." cal:Message.Attach="[Event Click] = [Action ShowAddUserConfigurationFlyout]"/>
+                </Menu>
+            </Grid>
+        </Grid>
+        
     </Grid>
 
 

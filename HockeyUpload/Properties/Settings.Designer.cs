@@ -9,8 +9,8 @@
 //------------------------------------------------------------------------------
 
 namespace HockeyApp.AppLoader.Properties {
-    
-    
+
+    [System.Configuration.SettingsProvider(typeof(HockeyApp.AppLoader.Util.CustomUserSettingsProvider))]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
@@ -24,7 +24,6 @@ namespace HockeyApp.AppLoader.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(HockeyApp.AppLoader.Util.CustomUserSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ThreadTokens {
@@ -51,9 +50,9 @@ namespace HockeyApp.AppLoader.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("26ec1e89aca921a016b9f2aaba8a916c")]
-        public string AppID {
+        public string AppID_orig {
             get {
-                return ((string)(this["AppID"]));
+                return ((string)(this["AppID_orig"]));
             }
         }
         
@@ -99,6 +98,15 @@ namespace HockeyApp.AppLoader.Properties {
             }
             set {
                 this["AAPTPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3332a5ac68033947aba42b14c511973c")]
+        public string AppID {
+            get {
+                return ((string)(this["AppID"]));
             }
         }
     }
