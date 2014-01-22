@@ -19,6 +19,7 @@ using System.Windows;
 using HockeyApp.AppLoader.PlatformStrategies;
 using System.IO;
 using MahApps.Metro.Controls.Dialogs;
+using System.Collections.Specialized;
 
 namespace HockeyApp.AppLoader
 {
@@ -87,8 +88,13 @@ namespace HockeyApp.AppLoader
 
             if (Environment.GetCommandLineArgs().Count() > 1)
             {
-                shell.PreferredHeight = 495;
-                shell.PreferredWidth = 642;
+                shell.PreferredHeight = 460;
+                shell.PreferredWidth = 820;
+                shell.MinHeight= 460;
+                shell.MinWidth = 820;
+                shell.IsDialog = true;
+                CenterWindow(shell);
+
                 base.OnStartup(sender, e);
                 IWindowManager wm = IoC.Get<IWindowManager>();
 
@@ -148,9 +154,12 @@ namespace HockeyApp.AppLoader
             else
             {
                 shell.PreferredWidth = 1280;
-                shell.PreferredHeight = 800;
+                shell.PreferredHeight = 690;
+                shell.MinHeight = 690;
+                shell.MinWidth = 1190;
+                CenterWindow(shell);
                 base.OnStartup(sender, e);
-
+                
                 ConfigurationStore config = IoC.Get<ConfigurationStore>();
                 ApplicationsViewModel avm = new ApplicationsViewModel();
                 
@@ -161,6 +170,17 @@ namespace HockeyApp.AppLoader
                     shell.ShowAddUserConfigurationFlyout();
                 }
             }
+        }
+
+        private void CenterWindow(MainWindowViewModel shell)
+        {
+            double x, y;
+
+
+            x = System.Windows.SystemParameters.MaximizedPrimaryScreenWidth / 2 - shell.PreferredWidth / 2;
+            y = System.Windows.SystemParameters.MaximizedPrimaryScreenHeight / 2 - shell.PreferredHeight / 2;
+            shell.X = Math.Max(x, 0);
+            shell.Y = Math.Max(y, 0);
         }
 
         protected override object GetInstance(Type serviceType, string key)

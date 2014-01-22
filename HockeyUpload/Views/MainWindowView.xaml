@@ -8,17 +8,16 @@
         Icon="/HockeyUpload;component/Resources/hockey_logo.ico" 
         Width="{Binding PreferredWidth,Mode=TwoWay}"
         Height="{Binding PreferredHeight, Mode=TwoWay}"
-        WindowStartupLocation="CenterScreen"
+        MinWidth="{Binding MinWidth}"
+        MinHeight="{Binding MinHeight}"
         ShowTitleBar="False"
         ShowWindowCommandsOnTop="False"
+        Left="{Binding X, Mode=TwoWay}" Top="{Binding Y, Mode=TwoWay}"
         BorderBrush="LightGray" BorderThickness="1"
         ShowMaxRestoreButton="{Binding IsDialog, Converter={StaticResource BooleanNotConverter}}">
-
-    
-    
     
     <i:Interaction.Behaviors>
-        <Behaviours:BorderlessWindowBehavior/>
+        <Behaviours:BorderlessWindowBehavior />
     </i:Interaction.Behaviors>
 
     <Window.Resources>
@@ -52,6 +51,6 @@
 
 
     <Grid>
-        <ContentControl Margin="0,40,0,20" cal:View.Model="{Binding ActiveContent}" Grid.Row="1"/>
+        <ContentControl Margin="0,30,0,10" cal:View.Model="{Binding ActiveContent}" Grid.Row="1"/>
     </Grid>
 </Controls:MetroWindow>

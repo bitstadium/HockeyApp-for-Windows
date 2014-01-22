@@ -21,8 +21,22 @@ namespace HockeyApp.AppLoader.ViewModels
         {
             this.FeedbackThread = newFeedbackThread;
             this.FeedbackMessages = new ObservableCollection<FeedbackMessageViewModel>();
-            this.FeedbackMessages.Add(new NewFeedbackMessage(this));
+            this.Add_NewFeedbackMessage();
             
+        }
+
+        private void Add_NewFeedbackMessage()
+        {
+            NewFeedbackMessage newMsg = new NewFeedbackMessage(this);
+            this.FeedbackMessages.Add(newMsg);
+            newMsg.PropertyChanged += (a, b) => {
+                if (b.PropertyName.Equals("Subject"))
+                {
+                    this.NotifyOfPropertyChange(() => this.Subject);
+                }else if (b.PropertyName.Equals("IsNewThread")){
+                    this.NotifyOfPropertyChange(() => this.IsNewThread);
+                }
+            };
         }
 
         public event EventHandler DeletedOnServer;
@@ -38,7 +52,7 @@ namespace HockeyApp.AppLoader.ViewModels
         {
             IWindowManager wm = IoC.Get<IWindowManager>();
             Exception exThrown = null;
-            ProgressDialogController pdc = await wm.ShowProgressAsync("Loading...", "Please wait. We are loading your feedbacks...");
+            ProgressDialogController pdc = await wm.ShowProgressAsync("Please wait...", "Sending feedback");
             try
             {
                 this.FeedbackThread = await HockeyClientWPF.Instance.OpenFeedbackThreadAsync(token);
@@ -47,7 +61,7 @@ namespace HockeyApp.AppLoader.ViewModels
                 if (this.FeedbackThread != null)
                 {
                     this.FeedbackThread.Messages.ForEach(p => FeedbackMessages.Add(new FeedbackMessageViewModel(p)));
-                    this.FeedbackMessages.Add(new NewFeedbackMessage(this));
+                    Add_NewFeedbackMessage();
                 }
                 else
                 {
@@ -156,7 +170,7 @@ namespace HockeyApp.AppLoader.ViewModels
 
             if (this.IsNewThread)
             {
-                this.Subject = "New Subject";
+                this.Subject = null;
             }
             else
             {

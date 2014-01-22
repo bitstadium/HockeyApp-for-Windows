@@ -6,7 +6,7 @@
              xmlns:extensions="clr-namespace:HockeyApp.AppLoader.Extensions"
              xmlns:model="clr-namespace:HockeyApp.AppLoader.Model"
              mc:Ignorable="d" 
-             d:DesignHeight="476" d:DesignWidth="300"
+             d:DesignHeight="476" d:DesignWidth="600"
              >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -24,8 +24,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="80*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="75"/>
@@ -40,9 +39,9 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="App ID" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -56,7 +55,7 @@
         </Grid>
 
         <TextBlock Text="File" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
-        <TextBlock Text="{Binding FileToUpload}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding FileToUpload}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" ToolTip="{Binding FileToUpload}"/>
 
         <Grid Grid.Row="4" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -86,6 +85,6 @@
         </Grid>
         
         <TextBlock Text="Notes (markdown)" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
-        <TextBox Text="{Binding Notes}" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap"/>
+        <TextBox Text="{Binding Notes}" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

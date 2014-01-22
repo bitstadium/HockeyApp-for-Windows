@@ -12,37 +12,77 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary Source="MyIcons.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ProgressBar.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid Margin="10,0,10,0">
+
+    <Grid Margin="15,0,10,0" Grid.Column="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <!--
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Text="Please choose an application" Grid.Row="0"/>
+            -->
+        <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{StaticResource OneIcon}" Grid.Column="0"/>
+            <TextBlock Margin="10,0,0,0" Text="Choose application" Grid.Column="1" FontSize="16"/>
+        </Grid>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Text="Please choose an application" Grid.Row="0"/>
         <ComboBox Grid.Row="1"
+                  Grid.Column="1"
                   HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Center" 
+                  VerticalAlignment="Top" 
                   ItemsSource="{Binding ValidApps}" 
                   SelectedItem="{Binding SelectedApp}" 
                   DisplayMemberPath="Title"/>
-        
-        <ContentControl cal:View.Model="{Binding SelectedApp}" Grid.Row="2" Margin="0,10,0,0"/>
 
-        <Grid Grid.Row="3">
+
+        <Grid Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{StaticResource TwoIcon}" Grid.Column="0"/>
+            <TextBlock Margin="10,0,0,0" Text="Add details" Grid.Column="1" FontSize="16"/>
+        </Grid>
+        <ContentControl cal:View.Model="{Binding SelectedApp}" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" VerticalAlignment="Stretch"/>
+
+        
+        
+        <Grid Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{StaticResource ThreeIcon}" Grid.Column="0"/>
+            <TextBlock Margin="10,0,0,0" Text="Confirm" Grid.Column="1" FontSize="16"/>
+        </Grid>
+        <Menu Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <MenuItem x:Name="Upload" Header="Upload"/>
+            <!--<MenuItem x:Name="Cancel" Header="Cancel"/>-->
+        </Menu>
+
+        <!--
+        <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="160"/>
             </Grid.ColumnDefinitions>
             <Grid Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="3">
                 <Border BorderThickness="1" BorderBrush="{DynamicResource ControlBorderBrush}">
-                    <!--Foreground="#bfe7f8"-->
                     <mah:MetroProgressBar Minimum="0" Maximum="100" VerticalAlignment="Stretch" Value="{Binding UploadPercentage}" Background="White">
                         <mah:MetroProgressBar.Foreground>
                             <LinearGradientBrush StartPoint="0,0"
@@ -58,26 +98,22 @@
                             </LinearGradientBrush>
                         </mah:MetroProgressBar.Foreground>
                     </mah:MetroProgressBar>
-                    <!--<TextBlock Text="{Binding UploadPercentage}" HorizontalAlignment="Center"/>-->
                 </Border>
             </Grid>
             <Menu Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <!--<StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">-->
                 <MenuItem x:Name="Upload" Header="Upload"/>
                 <MenuItem x:Name="Cancel" Header="Cancel"/>
-                
-                <!--
-                <Button x:Name="Cancel" Content="Cancel" Width="80"/>
-                <Button x:Name="Upload" Content="Upload" Width="80"/>
-                        -->
             </Menu>
         </Grid>
-        
+-->
         <!-- Overlay -->
+        <!--
         <Grid Grid.Row="0" Grid.RowSpan="3" Background="{StaticResource LightGrayHalfOpacityBrush}" Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <StackPanel Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Uploading..." HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
             </StackPanel>
         </Grid>
+        -->
     </Grid>
+    
 </UserControl>

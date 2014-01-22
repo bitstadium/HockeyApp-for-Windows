@@ -20,18 +20,18 @@ namespace HockeyApp.AppLoader.Model
 
     public enum AppInfoStatusType
     {
-        [Display(Name="created",Order=1)]
-        created = 1,
-        [Display(Name = "downloadable", Order = 1)]
+        [Display(Name="disabled",Order=1)]
+        disabled = 1,
+        [Display(Name = "downloadable", Order = 2)]
         downloadable = 2
     }
 
     public enum AppInfoNotifyType
     {
-        [Display(Name = "none", Order = 1)]
-        none = 0,
-        [Display(Name = "Email", Order = 2)]
-        eMail = 1
+        [Display(Name = "off", Order = 1)]
+        off = 0,
+        [Display(Name = "email", Order = 2)]
+        email = 1
     }
 
     public enum AppInfoReleaseType
@@ -167,7 +167,10 @@ namespace HockeyApp.AppLoader.Model
                 if (this.defaultStatusType == 0) { this.defaultStatusType = 1; }
                 return this.defaultStatusType;
             }
-            set { this.defaultStatusType = value; }
+            set
+            {
+                this.defaultStatusType = value;
+            }
         }
         [DataMember]
         private int defaultNotifyType = 0;

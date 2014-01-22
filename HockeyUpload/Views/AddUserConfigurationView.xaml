@@ -9,10 +9,11 @@
              xmlns:util="clr-namespace:HockeyApp.AppLoader.Util"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="800"
-             FocusManager.FocusedElement="{Binding ElementName=txtUsername}">
+             FocusManager.FocusedElement="{Binding ElementName=txtUsername}" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
                 <ResourceDictionary Source="MyIcons.xaml"/>
                 <ResourceDictionary>
                     <converters:ConfigurableBooleanToVisibilityConverter
@@ -24,7 +25,6 @@
                         True="Collapsed" 
                         False="Visible" />
                 </ResourceDictionary>
-                
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="ListViewBackground"
                              Color="Transparent" />
@@ -48,34 +48,39 @@
             <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ApiBase}" Controls:TextboxHelper.Watermark="ApiBase" Height="20"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ApiBase}" Controls:TextboxHelper.Watermark="ApiBase" Height="20" BorderBrush="{StaticResource TextboxBorderColorDarkTheme}"/>
         <TextBox Grid.Row="2" Grid.Column="1" 
                  Text="{Binding ConfigurationName,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" 
                  x:Name="txtConfigurationName" 
-                 Controls:TextboxHelper.Watermark="Displayname of the configuration" 
+                 Controls:TextboxHelper.Watermark="Name of configuration" 
                  Controls:TextboxHelper.SelectAllOnFocus="True"
                  Height="20"
-                 />
+                 BorderBrush="{StaticResource TextboxBorderColorDarkTheme}"/>
         
         <CheckBox Grid.Column="2" Grid.Row="2" Content="Use as default" IsChecked="{Binding IsDefault}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Username}" Controls:TextboxHelper.Watermark="Username" Height="20"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Username}" Controls:TextboxHelper.Watermark="Username" Height="20"  BorderBrush="{StaticResource TextboxBorderColorDarkTheme}"/>
         <PasswordBox Grid.Column="1" x:Name="txtPassword" 
                      Grid.Row="4"
                      PasswordChanged="txtPassword_PasswordChanged"
-                     Controls:TextboxHelper.Watermark="Password" Height="20" />
+                     Controls:TextboxHelper.Watermark="Password" Height="20"  KeyDown="txtPassword_KeyDown"  BorderBrush="{StaticResource TextboxBorderColorDarkTheme}"/>
 
-        <Controls:Tile Title="" Width="70" Height="70" x:Name="Login"
-                           Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0">
-            <Controls:MetroImage Source="{StaticResource LoginIcon}" />
-        </Controls:Tile>
+        <!--
+        <MenuItem Foreground="White" x:Name="Login" Header="Sign in" Height="28" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right"  />
+        -->
+        <Button Foreground="White" x:Name="Login" Content="Sign in" Grid.Column="2" Grid.Row="4" Width="98"  HorizontalAlignment="Right" VerticalAlignment="Center" />
 
-        <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2">
+        <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Visibility="{Binding ShowGravatar, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding Gravatar}" Grid.Column="0" Margin="1" Width="48" Height="48"/>
-            <TextBlock Margin="10,0,0,0" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Foreground="White"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <Image Source="{Binding Gravatar}" Grid.Column="0" Margin="1" Width="48" Height="48" Grid.RowSpan="2"/>
+            <TextBlock Margin="10,0,0,0" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Foreground="White" Grid.Row="0"/>
+            <TextBlock Margin="10,0,0,0" FontStyle="Italic" Text="Please double-click an API token to select it:" Grid.Column="1" VerticalAlignment="Center" FontSize="12" Foreground="White" Grid.Row="1"/>
         </Grid>
         
 
@@ -87,6 +92,7 @@
                   Background="{StaticResource ListViewBackground}"
                   BorderThickness="1"
                   SelectionMode="Single" 
+                  BorderBrush="{StaticResource TextboxBorderColorDarkTheme}"
                   MouseDoubleClick="lvApiTokens_MouseDoubleClick"
                   SelectedItem="{Binding SelectedApiToken}">
             <ListView.View>

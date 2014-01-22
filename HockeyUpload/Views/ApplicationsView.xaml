@@ -8,7 +8,12 @@
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:util="clr-namespace:HockeyApp.AppLoader.Util"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1280">
+             d:DesignHeight="800" d:DesignWidth="1280" 
+             cal:Message.Attach="[Event DragEnter] = [Action OnDragEnterAndOver($eventargs)]; 
+             [Event DragOver] = [Action OnDragEnterAndOver($eventargs)];
+             [Event DragLeave] = [Action OnDragLeave($eventargs)];
+             [Event Drop] = [Action OnDrop($eventargs)]"
+             AllowDrop="{Binding IsDropAllowed}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -30,7 +35,7 @@
         
     </UserControl.Resources>
     
-    <Grid>
+    <Grid Background="White">
         <Grid Margin="20,0,0,0" Visibility="{Binding HasConfigurations, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
@@ -41,16 +46,16 @@
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="245*"/>
             </Grid.RowDefinitions>
 
-
-            <TextBlock Text="Configurations" FontFamily="Segoe UI" FontSize="24" Grid.Row="0"/>
-            <ListBox x:Name="lstConfigurations" FontFamily="Segoe UI" Grid.Row="1" ItemsSource="{Binding UserConfigurations}" SelectedItem="{Binding SelectedUserConfiguration}">
+            <TextBlock Text="Configurations" FontFamily="Segoe UI" FontSize="24" Grid.Row="1" VerticalAlignment="Top"/>
+            <ListBox x:Name="lstConfigurations" FontFamily="Segoe UI" Grid.Row="2" ItemsSource="{Binding UserConfigurations}" SelectedItem="{Binding SelectedUserConfiguration}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Tag="{Binding DataContext, ElementName=lstConfigurations}" Margin="0,5,0,5" Background="Transparent">
+                        <Grid Tag="{Binding DataContext, ElementName=lstConfigurations}" Margin="1,5,0,5" Background="Transparent">
                             <Grid.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem Header="Set default"  cal:Message.Attach="SetDefaultConfiguration"/>
@@ -106,30 +111,36 @@
                 </MenuItem>
             </Menu>
             <TextBox Controls:TextboxHelper.Watermark="Quickfilter" 
-                 Grid.Column="2" Grid.Row="0"
+                 Grid.Column="2" Grid.Row="1"
                  Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" 
-                 VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                 VerticalAlignment="Top" Margin="0,5,0,0"/>
 
-            <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Apps}" IsSynchronizedWithCurrentItem="True">
+            <ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Apps}" IsSynchronizedWithCurrentItem="True">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid Margin="2,7,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Margin="3">
+                            <Grid Grid.Column="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition Width="22"/>
-                                    <ColumnDefinition Width="2"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="4"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="4"/>
                                 </Grid.RowDefinitions>
-                                <Image Source="{Binding AppImage}" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                                <Image Source="{Binding AppImage}" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                    <Image.Clip>
+                                        <RectangleGeometry RadiusX="{Binding CornerRadius}"
+                                                    RadiusY="{Binding CornerRadius}"
+                                                    Rect="0,0,50,50" />
+                                    </Image.Clip>
+                                </Image>
                                 <!--
                                 <ContentControl Content="{StaticResource AndroidAppBadgeIcon}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                                 -->
@@ -142,7 +153,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <ContentControl Margin="0,10,0,0" cal:View.Model="{Binding Apps.CurrentItem}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
+            <ContentControl cal:View.Model="{Binding Apps.CurrentItem}" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
         </Grid>
         
         <Grid Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="0" Grid.RowSpan="2" Visibility="{Binding HasConfigurations, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
@@ -152,55 +163,46 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" FontSize="24" Text="No configurations available" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Text="Please add a configuration to load app informations" HorizontalAlignment="Center"/>
-                <Menu Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Grid.Row="0" FontSize="24" Text="No configuration available" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Text="Please add a configuration to load app information" HorizontalAlignment="Center"/>
+                <Menu Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" Foreground="#389BE8">
                     <MenuItem Header="Add new configuration..." cal:Message.Attach="[Event Click] = [Action ShowAddUserConfigurationFlyout]"/>
                 </Menu>
             </Grid>
         </Grid>
-        
-    </Grid>
 
+        <Grid Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="0" Grid.RowSpan="2" 
+              Visibility="{Binding IsInDragDropAction, Converter={StaticResource BooleanToVisibilityConverter}}"  Opacity="0.9">
 
-<!--
-
-
-    <Grid Margin="10,20,0,10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Quickfilter" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left"/>
-            <TextBox Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalAlignment="Stretch"
-                     Margin="65,3,2,4"
-                     VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0"/>
-            <util:SortableListView IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp}" Grid.Row="1" Margin="2,0,2,2" HorizontalAlignment="Stretch">
-                <util:SortableListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="150"/>
-                        <GridViewColumn Header="Platform" DisplayMemberBinding="{Binding Platform}" Width="150"/>
-                    </GridView>
-                </util:SortableListView.View>
-            </util:SortableListView>
-            <Grid Grid.Row="2">
-                <ComboBox ItemsSource="{Binding UserConfigurations}" 
-                      Margin="2,0,2,0"
-                      DisplayMemberPath="ConfigurationName" 
-                      SelectedItem="{Binding SelectedUserConfiguration}"
-                      HorizontalAlignment="Stretch"
-                      cal:Message.Attach="[Event SelectionChanged] = [SelectedUserConfiguration_OnSelectionChanged]"/>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Background" Value="LightBlue"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DDnDSourceIsOK}" Value="False">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ContentControl x:Name="DnDIcon">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="Content" Value="{StaticResource DropAllowedIcon}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DDnDSourceIsOK}" Value="False">
+                                    <Setter Property="Content" Value="{StaticResource DropNotAllowedIcon}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <TextBlock Grid.Row="1" Margin="0,10,0,0" Foreground="White" Text="{Binding DropText}" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
-        <GridSplitter Width="1" Grid.Column="0" HorizontalAlignment="Right"/>
-        <ContentControl cal:View.Model="{Binding Apps.CurrentItem}" Grid.Column="1" Margin="20,0,0,0"/>
     </Grid>
--->
 </UserControl>

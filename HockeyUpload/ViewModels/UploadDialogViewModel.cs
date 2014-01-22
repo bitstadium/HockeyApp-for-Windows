@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HockeyApp.AppLoader.Extensions;
 using System.Threading;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace HockeyApp.AppLoader.ViewModels
 {
@@ -54,54 +55,27 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        public bool IsUploading
-        {
-            get { return this._cancelTokenSource != null; }
-        }
 
         #region Commands
-        public void Cancel()
-        {
-            if (this._cancelTokenSource != null && !this._cancelTokenSource.IsCancellationRequested)
-            {
-                this._cancelTokenSource.Cancel();
-            }
-            else
-            {
-                base.Close();
-            }
-        }
-        public bool CanCancel
-        {
-            get
-            {
-                return !this.IsUploading || !this._cancelTokenSource.IsCancellationRequested;
-            }
-        }
-
-        private CancellationTokenSource _cancelTokenSource = null;
-        public CancellationTokenSource CancelTokenSource
-        {
-            get { return this._cancelTokenSource; }
-            set
-            {
-                this._cancelTokenSource = value;
-                NotifyOfPropertyChange(() => this.IsUploading);
-                NotifyOfPropertyChange(() => this.CanUpload);
-            }
-        }
+       
         public async Task Upload()
         {
+            IWindowManager wm = IoC.Get<IWindowManager>();
+            ProgressDialogController pdc = await wm.ShowProgressAsync("Please wait...", "Uploading your package to");
+            pdc.SetCancelable(true);
+            Exception exThrown = null;
             try
             {
-                this.CancelTokenSource = new CancellationTokenSource();
-                
+
                 this.SelectedApp.PrepareUpload();
                 AppInfo appInfo = this.SelectedApp.AppInfo;
-
+                CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
                 UploadStrategy uploadStrategy = UploadStrategy.GetStrategy(appInfo);
 
-                await uploadStrategy.Upload(this.SelectedApp.FileToUpload, this._activeUserConfiguration, ReportProgress, _cancelTokenSource.Token);
+
+                await uploadStrategy.Upload(this.SelectedApp.FileToUpload, this._activeUserConfiguration, (a, b) => {
+                    SetProgress(a, b, pdc, _cancelTokenSource);
+                }, _cancelTokenSource.Token);
 
                 string publicWebSite = this._activeUserConfiguration.ApiBase;
                 publicWebSite = publicWebSite.Substring(0, publicWebSite.Length - 6);
@@ -115,29 +89,31 @@ namespace HockeyApp.AppLoader.ViewModels
             }
             catch (Exception ex)
             {
-                IWindowManager wm = IoC.Get<IWindowManager>();
-                Task t = wm.ShowSimpleMessageAsync("Error", "Error while creating a new version:\n" + ex.Message);
+                exThrown = ex;
             }
-            finally
+
+            await pdc.CloseAsync();
+            if (exThrown != null)
             {
-                this.CancelTokenSource = null;
+                await wm.ShowSimpleMessageAsync("Error", "Error while creating a new version:\n" + exThrown.Message);
             }
+            
         }
 
-        public bool CanUpload { get { return this.SelectedApp != null && this.SelectedApp.CanUpload && !this.IsUploading; } }
+        public bool CanUpload { get { return this.SelectedApp != null && this.SelectedApp.CanUpload; } }
 
-        public double UploadPercentage { get; set; }
-        private void ReportProgress(object sender, HttpProgressEventArgs e)
+        private void SetProgress(object sender, HttpProgressEventArgs e, ProgressDialogController pdc, CancellationTokenSource _cancelToken)
         {
-            if (System.Windows.Threading.Dispatcher.CurrentDispatcher.CheckAccess())
-            {
-                double x, y;
-                x = e.BytesTransferred;
-                y = e.TotalBytes.GetValueOrDefault(1);
-                double percentage = x / y * 100;
-                this.UploadPercentage = percentage; //Math.Round(percentage,0);
-            }
-            NotifyOfPropertyChange(() => this.UploadPercentage);
+
+
+            double x, y;
+            x = e.BytesTransferred;
+            y = e.TotalBytes.GetValueOrDefault(1);
+            double percentage = x / y;
+            
+            pdc.SetProgress(percentage);
+            if (pdc.IsCanceled) { _cancelToken.Cancel(); }
+
         }
 
         #endregion

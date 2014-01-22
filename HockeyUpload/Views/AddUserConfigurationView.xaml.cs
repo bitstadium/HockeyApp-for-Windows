@@ -50,6 +50,17 @@ namespace HockeyApp.AppLoader.Views
             }
         }
 
+        private async void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            AddUserConfigurationViewModel vm = this.DataContext as AddUserConfigurationViewModel;
+            if (e.Key == Key.Enter && vm != null && vm.CanLogin)
+            {
+                await vm.Login();
+            }
+        }
+
+        
+
 
     }
 }

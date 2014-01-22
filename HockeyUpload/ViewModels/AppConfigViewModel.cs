@@ -85,12 +85,24 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
+        public double CornerRadius
+        {
+            get
+            {
+                if (this._app.Platform == AppInfoPlatforms.iOS)
+                {
+                    return 7.5;
+                }
+                return 0;
+            }
+        }
+
         public AppInfoStatusType SelectedStatus
         {
             get { return (AppInfoStatusType)this._app.DefaultStatusType; }
             set
             {
-                this._app.DefaultStatusType = (int)this.SelectedStatus;
+                this._app.DefaultStatusType = (int)value;
                 this.SaveAppConfig();
             }
         }
@@ -116,6 +128,11 @@ namespace HockeyApp.AppLoader.ViewModels
                 }
                 return this._platformDependendData;
             }
+        }
+
+        public bool IsPlatformSupported
+        {
+            get { return !(this.PlatformDependendData is NotSupportedPlatformViewModel); }
         }
 
         protected void SaveAppConfig()

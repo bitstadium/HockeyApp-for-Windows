@@ -60,20 +60,19 @@ namespace HockeyApp.AppLoader.ViewModels
             get { return this._selectedFeedbackThread; }
             set
             {
-                //if (this._addNewThreadRequest) { return; }
-                /*
-                if (value is AddFeedbackThreadViewModel)
+            
+                this._selectedFeedbackThread = value;
+                if (this._selectedFeedbackThread != null)
                 {
-                    this._addNewThreadRequest = true;
-                    FeedbackThreadViewModel vm = new FeedbackThreadViewModel(null);
-                    this.FeedbackThreadList.Insert(this.FeedbackThreadList.IndexOf(value) , vm);
-                    this._selectedFeedbackThread = vm;
-                    this._addNewThreadRequest = false;
+                    this._selectedFeedbackThread.PropertyChanged += (a, b) =>
+                    {
+                        if (b.PropertyName.Equals("IsNewThread"))
+                        {
+                            this.NotifyOfPropertyChange(() => this.CanCloseThread);
+                            this.NotifyOfPropertyChange(() => this.CanRefreshThread);
+                        }
+                    };
                 }
-                else
-                {*/
-                    this._selectedFeedbackThread = value;
-                //}
                 NotifyOfPropertyChange(() => SelectedFeedbackThread);
                 NotifyOfPropertyChange(() => this.CanCloseThread);
                 NotifyOfPropertyChange(() => this.CanRefreshThread);
@@ -96,11 +95,11 @@ namespace HockeyApp.AppLoader.ViewModels
             IWindowManager wm = IoC.Get<IWindowManager>();
             MetroDialogSettings settings = new MetroDialogSettings()
             {
-                AffirmativeButtonText = "Close thread",
+                AffirmativeButtonText = "Close",
                 NegativeButtonText = "Cancel"
             };
 
-            if (await wm.ShowMessageAsync("Close thread?", "Thread will be closed and cannot be opened later from the client. Continue anyway?",MessageDialogStyle.AffirmativeAndNegative, settings) 
+            if (await wm.ShowMessageAsync("Close thread?", "This thread will be closed and can not be reopened from the app. ",MessageDialogStyle.AffirmativeAndNegative, settings) 
                 == MessageDialogResult.Affirmative)
             {
                 FeedbackToken.DeleteToken(this.SelectedFeedbackThread.FeedbackThread.Token);
@@ -120,14 +119,14 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        public bool CanCloseThread { get { return this.SelectedFeedbackThread != null; } }
+        public bool CanCloseThread { get { return this.SelectedFeedbackThread != null && !this.SelectedFeedbackThread.IsNewThread; } }
 
         public void RefreshThread()
         {
             this.SelectedFeedbackThread.RefreshFeedbackThread();
         }
 
-        public bool CanRefreshThread { get { return this.SelectedFeedbackThread != null; } }
+        public bool CanRefreshThread { get { return this.SelectedFeedbackThread != null && !this.SelectedFeedbackThread.IsNewThread; } }
         #endregion
     }
 

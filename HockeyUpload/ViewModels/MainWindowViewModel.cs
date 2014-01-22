@@ -97,6 +97,10 @@ namespace HockeyApp.AppLoader.ViewModels
         public void ShowAddUserConfigurationFlyout()
         {
             AddUserConfigurationViewModel vm = new AddUserConfigurationViewModel();
+            if (ConfigurationStore.Instance.UserConfigurations.Count == 0)
+            {
+                vm.IsDefault = true;
+            }
             this.ActiveFlyoutContent = vm;
             this.IsFlyoutOpen = true;
 
@@ -120,12 +124,12 @@ namespace HockeyApp.AppLoader.ViewModels
 
         #region appearance
         
-        private double _preferredWidth = 100;
+        private double _preferredWidth = 1200;
         public double PreferredWidth{get{return this._preferredWidth;}
             set{this._preferredWidth = value;
             NotifyOfPropertyChange(()=>this.PreferredWidth);}
         }
-        private double _preferrendHeight = 100;
+        private double _preferrendHeight = 800;
         public double PreferredHeight
         {
             get
@@ -136,6 +140,60 @@ namespace HockeyApp.AppLoader.ViewModels
             {
                 this._preferrendHeight = value;
                 NotifyOfPropertyChange(() => this._preferrendHeight);
+            }
+        }
+        private double _minWidth = 0;
+        public double MinWidth
+        {
+            get { return this._minWidth; }
+            set
+            {
+                this._minWidth = value;
+                NotifyOfPropertyChange(() => this.MinWidth);
+            }
+        }
+
+        private double _minHeight = 0;
+        public double MinHeight
+        {
+            get { return this._minHeight; }
+            set
+            {
+                this._minHeight = value;
+                NotifyOfPropertyChange(() => this.MinHeight);
+            }
+        }
+
+        private double _x = 0;
+        public double X
+        {
+            get { return _x; }
+            set
+            {
+                this._x = value;
+                NotifyOfPropertyChange(() => this.X);
+            }
+        }
+        private double _y = 0;
+        public double Y
+        {
+            get { return _y; }
+            set
+            {
+                this._y = value;
+                NotifyOfPropertyChange(() => this.Y);
+            }
+        }
+
+
+        private bool _IsDialog = false;
+        public bool IsDialog
+        {
+            get { return _IsDialog; }
+            set
+            {
+                this._IsDialog = value;
+                NotifyOfPropertyChange(() => this.IsDialog);
             }
         }
         #endregion

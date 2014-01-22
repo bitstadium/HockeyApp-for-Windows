@@ -20,23 +20,49 @@ namespace HockeyApp.AppLoader.ViewModels
         {
             base.DisplayName = "Add new configuration";
             this.ApiBase = HockeyApp.AppLoader.Properties.Settings.Default.DefaultApiBase;
-
-            string configName = "Name of new Configuration";
-            string suffix = "";
-            int i = 0;
-            while (ConfigurationStore.Instance.IsConfigurationNameUsed(configName + suffix))
-            {
-                suffix = "_" + ++i;
-            }
-            this.ConfigurationName = configName + suffix;
         }
 
         public UserConfiguration NewUserConfiguration { get; private set; }
-        public string ApiBase { get; set; }
-        public string ConfigurationName { get; set; }
+        private string _apiBase = "";
+        public string ApiBase
+        {
+            get { return this._apiBase; }
+            set
+            {
+                this._apiBase = value;
+                NotifyOfPropertyChange(() => this.ApiBase);
+                NotifyOfPropertyChange(() => this.CanLogin);
+            }
+        }
+        private string _configurationName = "";
+        public string ConfigurationName { get{return this._configurationName;}
+            set{
+                this._configurationName = value;
+                NotifyOfPropertyChange(() => this.CanLogin);
+            }
+        }
+
         public bool IsDefault { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+
+        private string _userName = "";
+        public string Username { get{
+            return this._userName;
+        }
+            set{this._userName = value;
+            NotifyOfPropertyChange(()=>this.Username);
+            NotifyOfPropertyChange(() => this.CanLogin);
+            }
+        }
+
+        private string _password = "";
+        public string Password { get{
+            return this._password;}
+            set{
+                this._password = value;
+                NotifyOfPropertyChange(()=>this.Password);
+                NotifyOfPropertyChange(() => this.CanLogin);
+            }
+        }
 
         private string _name = "";
         public string Name
@@ -73,7 +99,13 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        public List<ApiToken> ApiTokens { get; private set; }
+        private List<ApiToken> _apiTokens = null;
+        public List<ApiToken> ApiTokens { get{return this._apiTokens;}
+            set{this._apiTokens = value;
+            NotifyOfPropertyChange(() => this.ApiTokens);
+            }
+        }
+
         private ApiToken _selectedApiToken = null;
         public ApiToken SelectedApiToken
         {
@@ -86,13 +118,37 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
+        public bool CanLogin
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(this.ApiBase)
+                    && !String.IsNullOrWhiteSpace(this.ConfigurationName)
+                    && !String.IsNullOrWhiteSpace(this.Username)
+                    && !String.IsNullOrWhiteSpace(this.Password);
+            }
+        }
+
+        private bool _showGravatar = false;
+        public bool ShowGravatar
+        {
+            get { return this._showGravatar; }
+            set
+            {
+                this._showGravatar = value;
+                NotifyOfPropertyChange(() => this.ShowGravatar);
+            }
+        }
         public async Task Login()
         {
             IWindowManager wm = IoC.Get<IWindowManager>();
             Exception exThrown = null;
             this.Name = "";
             this.GravatarHash = "";
-            ProgressDialogController pdc = await wm.ShowProgressAsync("Login", "Please wait - we are loading your userdata...");
+            this.ShowGravatar = false;
+            this.ApiTokens = null;
+            
+            ProgressDialogController pdc = await wm.ShowProgressAsync("Please wait...", "Loading user data");
             this.ApiTokens = null;
             this.SelectedApiToken = null;
             
@@ -105,6 +161,7 @@ namespace HockeyApp.AppLoader.ViewModels
 
                 this.Name = envelope.Name;
                 this.GravatarHash = envelope.GravatarHash;
+                this.ShowGravatar = true;
             }
             catch (Exception ex)
             {
@@ -116,6 +173,7 @@ namespace HockeyApp.AppLoader.ViewModels
             }
             else
             {
+                
                 if (this.ApiTokens.Count == 0)
                 {
                     MetroDialogSettings settings = new MetroDialogSettings()
@@ -174,10 +232,7 @@ namespace HockeyApp.AppLoader.ViewModels
             {
                 if (columnName == "ConfigurationName")
                 {
-                    if (string.IsNullOrWhiteSpace(this.ConfigurationName))
-                    {
-                        return "Please enter a name for the configuration!";
-                    }else if(ConfigurationStore.Instance.IsConfigurationNameUsed(this.ConfigurationName)){
+                    if(!string.IsNullOrWhiteSpace(this.ConfigurationName) && ConfigurationStore.Instance.IsConfigurationNameUsed(this.ConfigurationName)){
                         return "Name is already used!";
                     }
                 }

@@ -19,16 +19,14 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="90"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
@@ -41,7 +39,7 @@
         <TextBlock FontSize="24" Text="{Binding Title}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
 
         <!-- App Information" -->
-        <TextBlock Text="App-Information" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.ColumnSpan="2"/>
+        <TextBlock Text="App-Information" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="16" Grid.ColumnSpan="2"/>
         
         <TextBlock Text="App ID" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
         <TextBlock Text="{Binding PublicAppID}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
@@ -56,15 +54,31 @@
         <TextBlock Text="{Binding ReleaseType}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
                 
         <!-- DefaultValues -->
-        <TextBlock Text="Default values" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="7" Grid.ColumnSpan="3" Visibility="{Binding IsPlatformSupported, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Default values" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Grid.ColumnSpan="2"/>
+            <TextBlock Text="Status" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
+            <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoStatusType}}" SelectedItem="{Binding SelectedStatus}"/>
+            <TextBlock Text="Notify" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
+            <ComboBox Margin="2" Grid.Row="2" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoNotifyType}}" SelectedItem="{Binding SelectedNotify}"/>
+            
+        </Grid>
 
-        <TextBlock Text="Status" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
-        <ComboBox Margin="2" Grid.Row="8" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoStatusType}}" SelectedItem="{Binding SelectedStatus}"/>
+        <TextBlock Grid.Row="7" Grid.ColumnSpan="3" Text="iOS apps are not currently supported in HockeyApp for Windows."
+                   FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Visibility="{Binding IsPlatformSupported, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
 
-        <TextBlock Text="Notify" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
-        <ComboBox Margin="2" Grid.Row="9" Grid.Column="1" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoNotifyType}}" SelectedItem="{Binding SelectedNotify}"/>
 
-        <ContentControl cal:View.Model="{Binding PlatformDependendData}" Grid.Row="10" Grid.ColumnSpan="3" Margin="0,0,0,40" Grid.RowSpan="2"/>
+        <ContentControl cal:View.Model="{Binding PlatformDependendData}" Grid.Row="8" Grid.ColumnSpan="3" Margin="0,0,0,0" Grid.RowSpan="3"/>
 
     </Grid>
 </UserControl>

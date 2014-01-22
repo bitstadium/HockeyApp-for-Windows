@@ -1,14 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converter="clr-namespace:HockeyApp.AppLoader.Views.Converters">
-
-
-    
-    
     
     <SolidColorBrush Color="#0E63A6" x:Key="BlueButtonBackgroundBrush"/>
     <SolidColorBrush Color="LightGray" Opacity=".8" x:Key="LightGrayHalfOpacityBrush"/>
     <SolidColorBrush Color="#333D3F" x:Key="TextboxBorderColorDarkTheme"/>
+    <SolidColorBrush Color="#389BE8" x:Key="HockeyAppBlue"/>
     
     
     <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="RefreshIcon">
@@ -125,4 +122,5 @@
             </Path>
         </Grid>
     </Viewbox>
+
 </ResourceDictionary>

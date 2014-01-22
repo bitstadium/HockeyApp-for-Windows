@@ -6,6 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            <TextBlock Text="Not supported!" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </UserControl>

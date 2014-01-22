@@ -23,5 +23,8 @@ namespace HockeyApp.AppLoader.Views
         {
             InitializeComponent();
         }
+
+  
+
     }
 }

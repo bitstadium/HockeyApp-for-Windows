@@ -12,17 +12,18 @@ namespace HockeyApp.AppLoader.Model
 
 
 
-    public enum SupportedFileExtensions
-    {
-        None,
-        APK,
-        MSI,
-        ZIP,
-        XAP
-    }
+
 
     public class CommandLineArgs
     {
+        public static string[] SupportedFileExtensions = new string[]
+        {
+            ".APK",
+            ".MSI",
+            ".ZIP",
+            ".XAP"
+        };
+
 
         [ArgsMemberSwitch(0)]
         public string ExeFile { get; set; }

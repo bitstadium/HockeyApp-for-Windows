@@ -68,6 +68,11 @@ namespace HockeyApp.AppLoader
             }
 
             AddMetroResources(result);
+
+            MahApps.Metro.Theme currentTheme = MahApps.Metro.Theme.Light;
+            MahApps.Metro.Accent currentAccent = MahApps.Metro.ThemeManager.DefaultAccents.First(x => x.Name == "Blue");
+            MahApps.Metro.ThemeManager.ChangeTheme(Application.Current, currentAccent, currentTheme);
+
             return result;
         }
 
@@ -91,20 +96,12 @@ namespace HockeyApp.AppLoader
                                        "pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml",
                                        UriKind.RelativeOrAbsolute)
                                },
-                               /*
+                               
                            new ResourceDictionary
                                {
                                    Source =
                                        new Uri(
-                                       "pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml",
-                                       UriKind.RelativeOrAbsolute)
-                               },
-                                */
-                               new ResourceDictionary
-                               {
-                                   Source =
-                                       new Uri(
-                                       "pack://application:,,,/Views/MyColors.xaml",
+                                       "pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml",
                                        UriKind.RelativeOrAbsolute)
                                },
                            new ResourceDictionary
@@ -120,21 +117,14 @@ namespace HockeyApp.AppLoader
                                        new Uri(
                                        "pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml",
                                        UriKind.RelativeOrAbsolute)
-                               },
-                           new ResourceDictionary
-                               {
-                                   Source =
-                                       new Uri(
-                                       "pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml",
-                                       UriKind.RelativeOrAbsolute)
-                               },
+                               },/*
                            new ResourceDictionary
                                {
                                    Source =
                                        new Uri(
                                        "pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml",
                                        UriKind.RelativeOrAbsolute)
-                               },
+                               },*/
                            new ResourceDictionary
                                {
                                    Source =

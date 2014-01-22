@@ -15,6 +15,7 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <TextBlock Text="Update" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,0,0,0"/>
         <CheckBox Content="Mandatory" IsChecked="{Binding IsMandatory}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

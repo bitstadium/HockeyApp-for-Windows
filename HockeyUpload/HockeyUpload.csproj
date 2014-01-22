@@ -59,13 +59,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
     </Reference>
-    <Reference Include="Caliburn.Micro">
-      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net40\Caliburn.Micro.dll</HintPath>
+    <Reference Include="Caliburn.Micro, Version=1.5.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Caliburn.Micro.Logging">
+    <Reference Include="Caliburn.Micro.Logging, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Caliburn.Micro.Logging.1.5.0.0\lib\net40\Caliburn.Micro.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Caliburn.Micro.Logging.NLog">
+    <Reference Include="Caliburn.Micro.Logging.NLog, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Caliburn.Micro.Logging.NLog.1.5.0.0\lib\net40\Caliburn.Micro.Logging.NLog.dll</HintPath>
     </Reference>
     <Reference Include="HockeyApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -76,9 +79,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HockeySDK.Core.2.0.2-beta\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.12.0.21, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MahApps.Metro, Version=0.13.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MahApps.Metro.0.12.0.21-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.13.0.4-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -95,7 +98,6 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net" />
@@ -105,7 +107,7 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.0.12.0.21-ALPHA\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.13.0.4-ALPHA\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -124,6 +126,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Caliburn\Micro\Logging\DebugLogger.cs" />
     <Compile Include="Extensions\AppInfoPlatformTypeConverter.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\EnumValueExtension.cs" />
@@ -231,9 +234,6 @@
     <Compile Include="Views\UploadDialogView.xaml.cs">
       <DependentUpon>UploadDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserConfigurationView.xaml.cs">
-      <DependentUpon>UserConfigurationView.xaml</DependentUpon>
-    </Compile>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -318,10 +318,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserConfigurationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -363,9 +359,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Entypo-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\hockey_logo.png" />
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +387,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\windows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
