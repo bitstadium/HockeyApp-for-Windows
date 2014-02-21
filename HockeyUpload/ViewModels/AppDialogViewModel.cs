@@ -41,8 +41,21 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
         public string FileToUpload { get; private set; }
-        
-        public string Notes { get; set; }
+
+        private string _notes = "";
+
+        public string Notes
+        {
+            get
+            {
+                return this._notes;
+            }
+            set
+            {
+                this._notes = value;
+                NotifyOfPropertyChange(()=>this.Notes);
+            }
+        }
 
         public AppInfoStatusType SelectedStatus { get; set; }
         public AppInfoNotifyType SelectedNotify { get; set; }

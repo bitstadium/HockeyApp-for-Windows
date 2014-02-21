@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Handlers;
 using System.Text;
 using System.Threading;
@@ -38,6 +39,18 @@ namespace HockeyApp.AppLoader.PlatformStrategies
         }
 
         public abstract Task Upload(string filename, UserConfiguration uc, EventHandler<HttpProgressEventArgs> progressHandler, CancellationToken cancelToken);
+
+        public abstract string UrlToShowAfterUpload { get; }
+
+        protected MultipartFormDataContent GetInitalizedMultipartFormDataContent()
+        {
+            string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
+            var multipartContent = new MultipartFormDataContent(boundary);
+            multipartContent.Headers.Remove("Content-Type");
+            // default boundary uses quotes....
+            multipartContent.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
+            return multipartContent;
+        }
 
     }
 }

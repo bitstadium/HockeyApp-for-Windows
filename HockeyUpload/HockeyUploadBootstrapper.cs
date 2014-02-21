@@ -20,6 +20,7 @@ using HockeyApp.AppLoader.PlatformStrategies;
 using System.IO;
 using MahApps.Metro.Controls.Dialogs;
 using System.Collections.Specialized;
+using AppLimit.NetSparkle;
 
 namespace HockeyApp.AppLoader
 {
@@ -63,20 +64,17 @@ namespace HockeyApp.AppLoader
                 version.ToString(),
                 null,
                 null,
-                (ex) =>
-                {
-                    return "";
-                });
+                (ex) => "");
             
-            //TODO
-            //HockeyApp.HockeyClientWPF.Instance.SendCrashesNowAsync();
+            
+            HockeyApp.HockeyClientWPF.Instance.SendCrashesNowAsync();
         }
 
 
         private async Task ShowHelp(IWindowManager wm)
         {
-            StringBuilder sb = new StringBuilder();
-            StringWriter tw = new StringWriter(sb);
+            var sb = new StringBuilder();
+            var tw = new StringWriter(sb);
             CommandLineArgs.WriteHelp(tw, "HockeyUpload");
             await wm.ShowSimpleMessageAsync("Usage", sb.ToString());
         }
@@ -90,7 +88,7 @@ namespace HockeyApp.AppLoader
             {
                 shell.PreferredHeight = 460;
                 shell.PreferredWidth = 820;
-                shell.MinHeight= 460;
+                shell.MinHeight = 460;
                 shell.MinWidth = 820;
                 shell.IsDialog = true;
                 CenterWindow(shell);
@@ -105,14 +103,18 @@ namespace HockeyApp.AppLoader
                 }
 
 
-                ProgressDialogController pdc = await wm.ShowProgressAsync("Matching apps...", "Please wait - we are looking for your app-configuration");
-                
-                CommandLineArgs cmdLineArgs = null;
+                ProgressDialogController pdc =
+                    await
+                        wm.ShowProgressAsync("Matching apps...",
+                            "Please wait - we are looking for your app-configuration");
+
                 Exception exThrown = null;
                 try
                 {
                     _logger.Info("Commandline Args=" + Environment.CommandLine);
-                    cmdLineArgs = Args.Configuration.Configure<HockeyApp.AppLoader.Model.CommandLineArgs>().CreateAndBind(Environment.GetCommandLineArgs());
+                    var cmdLineArgs =
+                        Args.Configuration.Configure<HockeyApp.AppLoader.Model.CommandLineArgs>()
+                            .CreateAndBind(Environment.GetCommandLineArgs());
                     string errMsg = "";
                     if (!cmdLineArgs.IsValid(out errMsg))
                     {
@@ -121,31 +123,32 @@ namespace HockeyApp.AppLoader
                     }
                     this.container.ComposeExportedValue<CommandLineArgs>(cmdLineArgs);
 
-                    AppInfoMatcher matcher = new AppInfoMatcher();
+                    var matcher = new AppInfoMatcher();
                     List<AppInfo> list = await matcher.GetMatchingApps(cmdLineArgs);
                     if (list.Count == 0)
                     {
                         await pdc.CloseAsync();
-                        await wm.ShowSimpleMessageAsync("Could not find matching apps", "No matching application found. Please check the configuration information!");
+                        await
+                            wm.ShowSimpleMessageAsync("Could not find matching apps",
+                                "No matching application found. Please check the configuration information!");
                         Application.Current.Shutdown(-1);
                         return;
                     }
 
 
-                    UploadDialogViewModel vm = new UploadDialogViewModel(list, matcher.ActiveUserConfiguration);
-                    vm.Closed += delegate(object s, EventArgs args)
-                    {
-                        Application.Shutdown(0);
-                    };
+                    var vm = new UploadDialogViewModel(list, matcher.ActiveUserConfiguration);
+                    vm.Closed += (s, args) => Application.Shutdown(0);
                     await pdc.CloseAsync();
                     shell.Init(vm);
-                   
-                }catch(Exception ex){
+
+                }
+                catch (Exception ex)
+                {
                     exThrown = ex;
                 }
                 if (exThrown != null)
                 {
-                    
+
                     await pdc.CloseAsync();
                     await wm.ShowSimpleMessageAsync("Error", "An exception was thrown:\n" + exThrown.Message);
                     Application.Shutdown(-1);
@@ -159,16 +162,23 @@ namespace HockeyApp.AppLoader
                 shell.MinWidth = 1190;
                 CenterWindow(shell);
                 base.OnStartup(sender, e);
-                
-                ConfigurationStore config = IoC.Get<ConfigurationStore>();
-                ApplicationsViewModel avm = new ApplicationsViewModel();
-                
-                
+
+                var config = IoC.Get<ConfigurationStore>();
+                var avm = new ApplicationsViewModel();
+
+
                 shell.Init(avm);
-                
-                if (config.UserConfigurations.Count == 0){
+
+                if (config.UserConfigurations.Count == 0)
+                {
                     shell.ShowAddUserConfigurationFlyout();
                 }
+
+                var sparkle = new Sparkle(HockeyApp.AppLoader.Properties.Settings.Default.DefaultApiBase
+                                           + "apps/"
+                                           + HockeyApp.AppLoader.Properties.Settings.Default.AppID
+                                           + "?format=rss");
+                sparkle.StartLoop(true, true);
             }
         }
 

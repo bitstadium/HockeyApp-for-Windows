@@ -138,7 +138,8 @@
     <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="AddFeedbackThreadIcon">
         <Grid>
             <Grid Width="48" Height="48" Visibility="Collapsed" />
-            <Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z" Stretch="Uniform" Fill="#FFFFFFFF" Width="38" Height="38" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+            <Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z" 
+                  Stretch="Uniform" Fill="#FFFFFFFF" Width="38" Height="38" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                 <Path.RenderTransform>
                     <TransformGroup>
                         <TransformGroup.Children>
@@ -391,4 +392,78 @@
             </Path>
         </Grid>
     </Viewbox>
+
+
+    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="DeleteAttachmentInactiveIcon" x:Shared="False">
+        <Grid>
+            <Grid Name="backgroundGrid" Width="256" Height="256" Visibility="Visible">
+                <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF333D3F" Visibility="Visible" />
+            </Grid>
+            <Path Data="M51.527958,0L64,12.4741 44.47221,32.001027 64,51.52871 51.528,64.000001 32.000016,44.472668 12.471823,64.000001 0.0010004044,51.528802 19.528015,32.001088 0,12.473726 12.472,0.0010004044 31.999884,19.528773z" Stretch="Uniform" Fill="#FF333D3F" Width="178" Height="178" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <RotateTransform Angle="0" />
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+    </Viewbox>
+
+    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="DeleteAttachmentActiveIcon" x:Shared="False">
+        <Grid>
+            <Grid  Width="256" Height="256" Visibility="Visible">
+                <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FFFFFFFF" Visibility="Visible" />
+            </Grid>
+            <Path Data="M51.527958,0L64,12.4741 44.47221,32.001027 64,51.52871 51.528,64.000001 32.000016,44.472668 12.471823,64.000001 0.0010004044,51.528802 19.528015,32.001088 0,12.473726 12.472,0.0010004044 31.999884,19.528773z" Stretch="Uniform" Fill="#FFFFFFFF" Width="178" Height="178" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <RotateTransform Angle="0" />
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+    </Viewbox>
+
+
+    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="AddAttachmentIcon" x:Shared="False">
+        <Grid>
+            <Grid Width="48" Height="48" Visibility="Collapsed" />
+            <Path Data="F1M-1800.12,3181.48C-1800.12,3181.48 -1803.22,3172.42 -1813.67,3175.58 -1813.67,3175.58 -1822.52,3177.87 -1820.93,3188.08L-1807.87,3226.17 -1804.99,3225.18 -1817.71,3188.05C-1817.71,3188.05 -1820.44,3181.75 -1812.98,3178.38 -1812.98,3178.38 -1805.77,3175.6 -1802.56,3183.22L-1786.65,3229.63C-1786.65,3229.63 -1786.14,3234.44 -1790.63,3235.46 -1790.63,3235.46 -1792.78,3236.54 -1796.5,3233.79L-1803.82,3212.42 -1809.85,3194.84C-1809.85,3194.84 -1809.94,3192.33 -1808.27,3191.61 -1807.43,3191.25 -1805.9,3191.14 -1805.05,3193.37L-1794.19,3225.06 -1791.09,3224 -1802.17,3191.67C-1802.17,3191.67 -1803.96,3187.16 -1809.04,3188.84 -1810.81,3189.42 -1813.38,3190.48 -1812.95,3195.18L-1799.38,3234.78C-1799.38,3234.78 -1796.27,3240.08 -1789.53,3238.67 -1789.53,3238.67 -1783.39,3237.06 -1783.69,3229.41L-1800.12,3181.48z" 
+                  Stretch="Uniform" Fill="#FFFFFFFF" Width="38" Height="38" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <RotateTransform Angle="0" />
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+    </Viewbox>
+
+    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Key="RemoveAttachmentIcon" x:Shared="False">
+        <Grid>
+            <Grid Width="48" Height="48" Visibility="Collapsed" />
+            <Path Data="M14.511646,44.110343C14.829716,45.881685,15.424847,47.572968,16.268033,49.104128L14.702688,53.497459 11.564998,52.37661z M25.987312,33.362288L22.804199,36.553244 27.597363,41.344807 22.804199,46.13637 25.987312,49.317556 30.779498,44.525993 35.571684,49.317556 38.754795,46.13637 33.961634,41.344807 38.754795,36.553244 35.571684,33.362288 30.779498,38.153851z M30.668469,28.780752C37.532761,28.780753 43.097012,34.34258 43.097012,41.214881 43.097012,48.076927 37.532761,53.638754 30.668469,53.638754 23.80424,53.638754 18.239013,48.076927 18.239013,41.214881 18.239013,34.34258 23.80424,28.780753 30.668469,28.780752z M20.118294,13.6911C21.079625,13.670301 21.954945,13.958259 22.677269,14.22641 27.775359,16.106593 26.345334,20.807051 26.345334,20.80705L24.502301,25.987555C22.842273,26.65762,21.319246,27.597712,19.980222,28.747824L22.976275,20.347006C23.712288,18.02678 22.429265,17.156695 21.53925,16.916672 19.750218,16.426624 18.243192,18.476824 18.243191,18.476824L11.911079,36.248554 4.2159443,57.850657C5.4269657,62.381098 7.8200083,62.891146 7.8200083,62.891146 12.028082,64.911345 14.660128,60.770941 14.660128,60.770941L17.937186,51.570045C18.620198,52.410128,19.382212,53.180202,20.215226,53.87027L17.155172,62.461107C12.557091,68.731714 6.6649876,66.121462 6.6649876,66.121462 0.42087746,62.991156 1.3038921,56.810556 1.3038921,56.810556L15.561145,16.786659C17.124516,14.411428,18.71327,13.721498,20.118294,13.6911z M23.49915,0.0026054382C25.758138,0.051530838 27.379575,0.77310371 27.379575,0.77310371 37.672791,4.8729401 34.409721,14.032573 34.409721,14.032573L30.579641,24.782141C29.480618,24.79214,28.404596,24.902136,27.365574,25.112128L31.373658,13.862579C33.641706,5.7929039 26.157549,3.4329967 26.157548,3.4329967 18.10438,1.40308 16.287342,8.1228104 16.287342,8.1228104L2.9170618,45.651304 0,44.611345 13.715288,6.1128902C16.636412,0.98872185,20.594737,-0.06029892,23.49915,0.0026054382z" 
+                  Stretch="Uniform" Fill="#FFFFFFFF" Width="38" Height="38" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <RotateTransform Angle="0" />
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+    </Viewbox>
+
 </ResourceDictionary>
+    

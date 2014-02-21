@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Runtime.Serialization;
+using Caliburn.Micro;
 using HockeyApp.AppLoader.Util;
 using System;
 using System.Collections.Generic;
@@ -17,37 +18,48 @@ namespace HockeyApp.AppLoader.ViewModels
         {
             base.DisplayName = "Feedback";
             this.FeedbackThreadList = new ObservableCollection<FeedbackThreadViewModel>();
-            loadFeedbackThreads();
+            LoadFeedbackThreads();
         }
 
-        private async void loadFeedbackThreads()
+        private async void LoadFeedbackThreads()
         {
             
-            foreach (string token in FeedbackToken.Get())
+            var wm = IoC.Get<IWindowManager>();
+            var pdc = await wm.ShowProgressAsync("Please wait...", "Loading feedbacks");
+            Exception exThrown = null;
+            try
             {
-                FeedbackThreadViewModel fbThread = new FeedbackThreadViewModel(null);
-                if (await fbThread.LoadThread(token))
+                foreach (string token in FeedbackToken.Get())
                 {
-                    fbThread.DeletedOnServer += async delegate(object sender, EventArgs args)
+                    var fbThread = new FeedbackThreadViewModel(null);
+                    if (await fbThread.LoadThread(token))
                     {
-                        IWindowManager wm = IoC.Get<IWindowManager>();
-                        await wm.ShowSimpleMessageAsync("Deleted", "Feedback-Thread was deleted on the server!");
-                        this.FeedbackThreadList.Remove(fbThread);
-                    };
-                    FeedbackThreadList.Add(fbThread);
+                        FeedbackThreadList.Add(fbThread);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                exThrown = ex;
+            }
+            await pdc.CloseAsync();
+
+            if (exThrown != null)
+            {    
+                await wm.ShowSimpleMessageAsync("Error", "An error occurred while loading feedbacks:\n" + exThrown.Message);
+            }
+
 
             if (this.FeedbackThreadList.Count == 0)
             {
                 this.NewThread();
-            }
 
-            //this.FeedbackThreadList.Add(new AddFeedbackThreadViewModel());
+            }
 
             this.SelectedFeedbackThread = this.FeedbackThreadList.FirstOrDefault();
             
         }
+
 
         #region props
         
@@ -121,9 +133,40 @@ namespace HockeyApp.AppLoader.ViewModels
 
         public bool CanCloseThread { get { return this.SelectedFeedbackThread != null && !this.SelectedFeedbackThread.IsNewThread; } }
 
-        public void RefreshThread()
+        public async void RefreshThread()
         {
-            this.SelectedFeedbackThread.RefreshFeedbackThread();
+            var wm = IoC.Get<IWindowManager>();
+            var pdc = await wm.ShowProgressAsync("Please wait...", "Refreshing feedbacks");
+            Exception exThrown = null;
+            bool wasLoaded = false;
+            try
+            {
+                wasLoaded = await this.SelectedFeedbackThread.RefreshFeedbackThread();
+            }
+            catch (Exception ex)
+            {
+                exThrown = ex;
+            }
+            await pdc.CloseAsync();
+
+            if (exThrown != null)
+            {    
+                await wm.ShowSimpleMessageAsync("Error", "An error occurred while refreshing feedthread:\n" + exThrown.Message);
+            }
+            else if (!wasLoaded)
+            {
+                await wm.ShowSimpleMessageAsync("Deleted", "Feedback-Thread was deleted on the server!");
+                this.FeedbackThreadList.Remove(this.SelectedFeedbackThread);
+                if (this.FeedbackThreadList.Count > 0)
+                {
+                    this.SelectedFeedbackThread = this.FeedbackThreadList[0];
+                }
+                else
+                {
+                    NewThread();
+                }
+            }
+            
         }
 
         public bool CanRefreshThread { get { return this.SelectedFeedbackThread != null && !this.SelectedFeedbackThread.IsNewThread; } }

@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyUpload", "HockeyUpload\HockeyUpload.csproj", "{3548B93D-8AC4-4B13-8143-ED6FBE65FA02}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "HockeyUploadSetup", "HockeyUploadSetup\HockeyUploadSetup.wixproj", "{B700A621-BC19-48DA-9CD4-D781E06EA6BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyUploaderConsole", "HockeyUploaderConsole\HockeyUploaderConsole.csproj", "{18247B04-6538-4B09-8C50-CB45D9B9B6D9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MahApps.Metro.NET45", "..\MahApps.Metro\MahApps.Metro\MahApps.Metro.NET45.csproj", "{942D11C4-29F5-46C4-8C14-4B976D56C637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,21 +67,6 @@ Global
 		{18247B04-6538-4B09-8C50-CB45D9B9B6D9}.Release35|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{18247B04-6538-4B09-8C50-CB45D9B9B6D9}.Release35|Mixed Platforms.Build.0 = Release|Any CPU
 		{18247B04-6538-4B09-8C50-CB45D9B9B6D9}.Release35|x86.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release|Any CPU.Build.0 = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release|x86.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release35|Any CPU.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release35|Any CPU.Build.0 = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release35|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release35|Mixed Platforms.Build.0 = Release|Any CPU
-		{942D11C4-29F5-46C4-8C14-4B976D56C637}.Release35|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

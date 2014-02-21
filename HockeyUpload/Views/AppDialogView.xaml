@@ -85,6 +85,6 @@
         </Grid>
         
         <TextBlock Text="Notes (markdown)" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
-        <TextBox Text="{Binding Notes}" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+        <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

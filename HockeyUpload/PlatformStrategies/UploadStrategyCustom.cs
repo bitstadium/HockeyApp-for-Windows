@@ -5,23 +5,29 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Handlers;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using HockeyApp.AppLoader.Extensions;
 using HockeyApp.AppLoader.Model;
 
 namespace HockeyApp.AppLoader.PlatformStrategies
 {
     internal class UploadStrategyCustom:UploadStrategy
     {
+        private string _versionId = "0";
         internal UploadStrategyCustom(AppInfo appInfo) : base(appInfo) { }
 
-        private async Task<string> AddVersion(UserConfiguration uc, CancellationToken cancelToken)
+        private async Task AddVersion(UserConfiguration uc, CancellationToken cancelToken)
         {
-            string versionID = "";
             Dictionary<string, string> formParms = new Dictionary<string, string>();
             formParms.Add("bundle_version", _appInfo.Version);
+            formParms.Add("notes_type", "1");
+            formParms.Add("status", _appInfo.Status.GetValueOrDefault(1) + "");
+            formParms.Add("notes", _appInfo.Notes);
 
             FormUrlEncodedContent paramContent = new FormUrlEncodedContent(formParms);
 
@@ -35,7 +41,7 @@ namespace HockeyApp.AppLoader.PlatformStrategies
                 string result = await sr.ReadAsStringAsync();
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 dynamic responseInfo = serializer.Deserialize<object>(result);
-                versionID = ((Dictionary<string, object>)responseInfo)["id"].ToString();
+                _versionId = ((Dictionary<string, object>)responseInfo)["id"].ToString();
             }
             else
             {
@@ -60,33 +66,27 @@ namespace HockeyApp.AppLoader.PlatformStrategies
 
                 throw new Exception(message.ToString());
             }
-            return versionID;
         }
 
 
         public override async Task Upload(string filename, Model.UserConfiguration uc, EventHandler<System.Net.Http.Handlers.HttpProgressEventArgs> progressHandler, System.Threading.CancellationToken cancelToken)
         {
-
-            string versionID = await this.AddVersion(uc, cancelToken);
-
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            values.Add("notes", _appInfo.Notes);
-            values.Add("notes_type", "1");
-            values.Add("status", _appInfo.Status.ToString());
-            values.Add("notify", _appInfo.Notify.ToString());
-            values.Add("release_type", _appInfo.ReleaseType.ToString());
-
-
-            FileStream fs = new FileStream(filename, FileMode.Open);
-
-            HttpContent formContent = new FormUrlEncodedContent(values);
-            HttpContent fileContent = new StreamContent(fs);
+            await this.AddVersion(uc, cancelToken);
+            var multipartContent = base.GetInitalizedMultipartFormDataContent();
+            
+            var values = new Dictionary<string, string>()
+            {
+                {"notes", _appInfo.Notes},
+                {"notes_type", "1"},
+                {"status", _appInfo.Status.ToString()},
+                {"notify", _appInfo.Notify.ToString()},
+                {"release_type", _appInfo.ReleaseType}
+            };
+            multipartContent.AddStringContents(values);
 
 
-            MultipartFormDataContent multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(formContent);
-            multipartContent.Add(fileContent, "ipa", Path.GetFileName(filename));
-
+            var fs = new FileStream(filename, FileMode.Open);
+            multipartContent.Add(new StreamContent(fs), "ipa", Path.GetFileName(filename));
 
             ProgressMessageHandler progress = new ProgressMessageHandler();
             progress.HttpSendProgress += progressHandler;
@@ -96,7 +96,7 @@ namespace HockeyApp.AppLoader.PlatformStrategies
             client.DefaultRequestHeaders.Add("X-HockeyAppToken", uc.UserToken);
             HttpResponseMessage response = null;
 
-            response = await client.PutAsync(uc.ApiBase + "apps/" + _appInfo.PublicID + "/app_versions/" + versionID, multipartContent, cancelToken);
+            response = await client.PutAsync(uc.ApiBase + "apps/" + _appInfo.PublicID + "/app_versions/" + this._versionId, multipartContent, cancelToken);
 
             if (response != null && !response.IsSuccessStatusCode)
             {
@@ -105,9 +105,10 @@ namespace HockeyApp.AppLoader.PlatformStrategies
             fs.Close();
         }
 
-
-        
-            
+        public override string UrlToShowAfterUpload
+        {
+            get { return "apps/" + _appInfo.PublicID + "/app_versions/" + this._versionId; }
+        }
         
     }
 }

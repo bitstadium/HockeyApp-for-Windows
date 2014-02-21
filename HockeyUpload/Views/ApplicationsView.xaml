@@ -110,7 +110,7 @@
                     </MenuItem.Header>
                 </MenuItem>
             </Menu>
-            <TextBox Controls:TextboxHelper.Watermark="Quickfilter" 
+            <TextBox Controls:TextboxHelper.Watermark="Quickfilter" x:Name="txtQuickFilter"
                  Grid.Column="2" Grid.Row="1"
                  Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" 
                  VerticalAlignment="Top" Margin="0,5,0,0"/>

@@ -3,7 +3,7 @@
   <Product Id="*" Name="HockeyApp" Language="1033" Version="1.0.0" Manufacturer="Bit Stadium GmbH" UpgradeCode="86A59F80-0F6B-408A-99F9-2E4A64632B46">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Description="HockeyAppSetup" Manufacturer="Bit Stadium GmbH" InstallPrivileges="elevated" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes"  />
     <MediaTemplate EmbedCab="yes"/>
 
     <Feature Id="ProductFeature" Title="HockeyApp" Level="1"  ConfigurableDirectory="INSTALLFOLDER" Description="HockeyApp" Display="expand">
@@ -12,19 +12,30 @@
     </Feature>
 
     <Icon Id="hockey_logo.ico" SourceFile="./hockey_logo.ico" />
-    
 
-    <UIRef Id="WixUI_Mondo" />
-    <UIRef Id="WixUI_ErrorProgressText" />
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+
+      <Publish Dialog="ExitDialog"
+        Control="Finish"
+        Event="DoAction"
+        Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+    </UI>
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
 
     <WixVariable Id="WixUILicenseRtf" Value="Lizenz.rtf" />
     <WixVariable Id="WixUIDialogBmp" Value="Banner.bmp" />
     <WixVariable Id="WixUIBannerBmp" Value="Banner2.bmp" />
     
-
     <Property Id="ARPPRODUCTICON" Value="hockey_logo.ico" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch My Application Name" />
 
+    <Property Id="WixShellExecTarget" Value="[#HockeyAppExe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+   
+    
   </Product> 
 
   <Fragment>
@@ -37,9 +48,7 @@
         </Directory>
       </Directory>
     </Directory> 
-  </Fragment>
 
-  <Fragment>
     <Component Id="ProgramMenuDir" Guid="*" Directory="ProgramMenuDir">
       <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
       <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
@@ -124,6 +133,12 @@
       <Component Id='WindowsInstallerLinqSDK' Guid='*'>
         <File Id='WindowsInstallerLinqSDK' Name='Microsoft.Deployment.WindowsInstaller.Linq.dll' Source='$(var.HockeyUpload.TargetDir)Microsoft.Deployment.WindowsInstaller.Linq.dll' KeyPath='yes' />
       </Component>
+
+      <Component Id='Netsparkle' Guid='*'>
+        <File Id='Netsparkle' Name='AppLimit.NetSparkle.Net40.dll' Source='$(var.HockeyUpload.TargetDir)AppLimit.NetSparkle.Net40.dll' KeyPath='yes' />                    
+      </Component>
+
+      
 
     </ComponentGroup>
   </Fragment>

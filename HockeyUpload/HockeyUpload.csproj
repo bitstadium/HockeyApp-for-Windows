@@ -55,6 +55,10 @@
     <ApplicationIcon>Resources\hockey_logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppLimit.NetSparkle.Net40, Version=1.0.85.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AppLimit.NetSparkle.Net40.dll</HintPath>
+    </Reference>
     <Reference Include="Args, Version=1.1.0.32856, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
@@ -73,15 +77,15 @@
     </Reference>
     <Reference Include="HockeyApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HockeySDK.WPF.2.0.2-beta\lib\net45\HockeyApp.dll</HintPath>
+      <HintPath>..\packages\HockeySDK.WPF.2.1.0-beta1\lib\net45\HockeyApp.dll</HintPath>
     </Reference>
     <Reference Include="HockeyAppPCL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HockeySDK.Core.2.0.2-beta\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
+      <HintPath>..\packages\HockeySDK.Core.2.1.0-beta1\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.13.0.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MahApps.Metro, Version=0.13.0.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MahApps.Metro.0.13.0.4-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.13.0.23-ALPHA\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -107,7 +111,7 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.0.13.0.4-ALPHA\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.13.0.23-ALPHA\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -130,6 +134,7 @@
     <Compile Include="Extensions\AppInfoPlatformTypeConverter.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\EnumValueExtension.cs" />
+    <Compile Include="Extensions\MultipartFormDataContentExtension.cs" />
     <Compile Include="HockeyUploadBootstrapper.cs" />
     <Compile Include="MetroWindowManager.cs" />
     <Compile Include="Model\ApiToken.cs" />

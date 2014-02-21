@@ -42,7 +42,7 @@
     </Reference>
     <Reference Include="HockeyAppPCL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HockeySDK.Core.2.0.2-beta\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
+      <HintPath>..\packages\HockeySDK.Core.2.1.0-beta1\lib\portable-net45+win8+wp8\HockeyAppPCL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

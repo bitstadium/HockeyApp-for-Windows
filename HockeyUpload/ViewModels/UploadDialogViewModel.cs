@@ -79,7 +79,7 @@ namespace HockeyApp.AppLoader.ViewModels
 
                 string publicWebSite = this._activeUserConfiguration.ApiBase;
                 publicWebSite = publicWebSite.Substring(0, publicWebSite.Length - 6);
-                System.Diagnostics.Process.Start(publicWebSite + "apps/" + appInfo.PublicID);
+                System.Diagnostics.Process.Start(publicWebSite + uploadStrategy.UrlToShowAfterUpload);
                 
                 this.Close();
             }

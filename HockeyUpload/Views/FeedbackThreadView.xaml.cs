@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using HockeyApp.AppLoader.ViewModels;
 
 namespace HockeyApp.AppLoader.Views
 {
@@ -35,6 +36,11 @@ namespace HockeyApp.AppLoader.Views
                     element.BringIntoView();
                 }
             }
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            (((Hyperlink)sender).DataContext as FeedbackAttachmentViewModel).OpenAttachment();
         }
     }
 }

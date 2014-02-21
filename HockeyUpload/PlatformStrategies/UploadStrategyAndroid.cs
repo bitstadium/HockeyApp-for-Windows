@@ -7,6 +7,7 @@ using System.Net.Http.Handlers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HockeyApp.AppLoader.Extensions;
 using HockeyApp.AppLoader.Model;
 
 namespace HockeyApp.AppLoader.PlatformStrategies
@@ -17,25 +18,23 @@ namespace HockeyApp.AppLoader.PlatformStrategies
 
         public async override Task Upload(string filename, Model.UserConfiguration uc, EventHandler<HttpProgressEventArgs> progressHandler, CancellationToken cancelToken)
         {
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            values.Add("notes", _appInfo.Notes);
-            values.Add("notes_type", "0");
-            values.Add("status", _appInfo.Status.ToString());
-            values.Add("notify", _appInfo.Notify.ToString());
-            values.Add("release_type", _appInfo.ReleaseType.ToString());
-            values.Add("mandatory", _appInfo.Mandatory.ToString());
+            var multipartContent = base.GetInitalizedMultipartFormDataContent();
 
+            var values = new Dictionary<string, string>
+            {
+                {"notes", _appInfo.Notes},
+                {"notes_type", "0"},
+                {"status", _appInfo.Status.ToString()},
+                {"notify", _appInfo.Notify.ToString()},
+                {"release_type", _appInfo.ReleaseType},
+                {"mandatory", _appInfo.Mandatory.ToString()}
+            };
+
+            multipartContent.AddStringContents(values);
 
             FileStream fs = new FileStream(filename, FileMode.Open);
-
-            HttpContent formContent = new FormUrlEncodedContent(values);
             HttpContent fileContent = new StreamContent(fs);
-
-
-            MultipartFormDataContent multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(formContent);
             multipartContent.Add(fileContent, "ipa", Path.GetFileName(filename));
-
 
             ProgressMessageHandler progress = new ProgressMessageHandler();
             progress.HttpSendProgress += progressHandler;
@@ -52,6 +51,11 @@ namespace HockeyApp.AppLoader.PlatformStrategies
                 throw new Exception(response.ReasonPhrase);
             }
             fs.Close();
+        }
+
+        public override string UrlToShowAfterUpload
+        {
+            get { return "apps/" + this._appInfo.PublicID; }
         }
     }
 }
