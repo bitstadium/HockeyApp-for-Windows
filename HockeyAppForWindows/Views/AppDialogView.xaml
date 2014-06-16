@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="HockeyApp.AppLoader.Views.AppDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:extensions="clr-namespace:HockeyApp.AppLoader.Extensions"
+             xmlns:model="clr-namespace:HockeyApp.AppLoader.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="476" d:DesignWidth="600"
+             >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="80*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Text="{Binding Title}" Grid.ColumnSpan="2" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="App ID" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding PublicAppId}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Platform" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Platform}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Bundle ID" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding BundleId}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </Grid>
+
+        <TextBlock Text="File" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
+        <TextBlock Text="{Binding FileToUpload}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" ToolTip="{Binding FileToUpload}"/>
+
+        <Grid Grid.Row="4" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="90"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Version" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
+            <TextBox x:Name="Version" Text="{Binding Version, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" 
+                     IsEnabled="{Binding IsVersionEditable}" VerticalAlignment="Center" />
+            <CheckBox x:Name="IsMandatory" Content="Mandatory" 
+                      Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsMandatoryEnabled}"/>
+        </Grid>
+        
+        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Status" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+            <ComboBox Margin="0,0,5,0" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoStatusType}}" Grid.Row="1" Grid.Column="0" SelectedItem="{Binding SelectedStatus}"/>
+            <TextBlock Text="Notify" FontWeight="Bold" Grid.Row="0" Grid.Column="1"/>
+            <ComboBox Margin="0,0,5,0" ItemsSource="{extensions:EnumValues {x:Type model:AppInfoNotifyType}}" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedNotify}"/>
+        </Grid>
+        
+        <TextBlock Text="Notes (Markdown)" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" >
+            <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" 
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch"/>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
