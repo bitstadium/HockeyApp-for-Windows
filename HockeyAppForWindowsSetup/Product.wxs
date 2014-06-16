@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="HockeyApp" 
-           Language="1033" Version="1.2.2" 
+           Language="1033" Version="1.2.3" 
            Manufacturer="Bit Stadium GmbH" 
            UpgradeCode="86A59F80-0F6B-408A-99F9-2E4A64632B46">
     

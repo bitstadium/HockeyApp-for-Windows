@@ -261,8 +261,8 @@ namespace HockeyApp.AppLoader.ViewModels
             if (AcceptDrop(e.Data))
             {
                 string filename = (e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[])[0];
-                
-                Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location,filename);
+                Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location, "\"" + filename + "\"");
+              
             }
         }
         private string _dropText = "";
