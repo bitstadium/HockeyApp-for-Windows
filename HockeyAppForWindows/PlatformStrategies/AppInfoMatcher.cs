@@ -11,6 +11,7 @@ using System.IO.Compression;
 using Microsoft.Deployment.WindowsInstaller.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Caliburn.Micro;
+using HockeyApp.AppLoader.Util;
 
 
 namespace HockeyApp.AppLoader.PlatformStrategies
@@ -91,6 +92,24 @@ namespace HockeyApp.AppLoader.PlatformStrategies
                             string entrypoint = this.GetValueFromStream(zipEntry.Open(), "EntryPointType");
                             if (!String.IsNullOrWhiteSpace(entrypoint)){
                                 this._args.BundleID = entrypoint.Substring(0, entrypoint.LastIndexOf("."));
+                            }
+                        }
+                    }
+                    else if (zipEntry.Name.Equals("AppxManifest.xml"))
+                    {
+                        var appxManifest = AppxManifest.Create(zipEntry.Open());
+                        if (appxManifest.Package != null)
+                        {
+                            if (appxManifest.Package.Identity + "" != "")
+                            {
+                                if (String.IsNullOrWhiteSpace(this._args.Version))
+                                {
+                                    this._args.Version = appxManifest.Package.Identity.Version + "";
+                                }
+                                if (String.IsNullOrWhiteSpace(this._args.BundleID))
+                                {
+                                    this._args.BundleID = appxManifest.Package.Identity.Name + "";
+                                }
                             }
                         }
                     }

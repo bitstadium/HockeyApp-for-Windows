@@ -19,6 +19,7 @@ namespace HockeyApp.AppLoader.Model
         public static string[] SupportedFileExtensions = new string[]
         {
             ".APK",
+            ".APPX",
             ".MSI",
             ".ZIP",
             ".XAP"
@@ -128,6 +129,9 @@ namespace HockeyApp.AppLoader.Model
                     {
                         case ".APK":
                             retVal = AppInfoPlatforms.Android;
+                            break;
+                        case ".APPX":
+                            retVal = AppInfoPlatforms.WindowsPhone;
                             break;
                         case ".MSI":
                             retVal = AppInfoPlatforms.Windows;

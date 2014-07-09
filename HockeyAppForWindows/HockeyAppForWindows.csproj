@@ -150,6 +150,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Util\AppxManifest.cs" />
     <Compile Include="Util\ConsoleHelpFormatterCustom.cs" />
     <Compile Include="Util\CustomUserSettingsProvider.cs" />
     <Compile Include="Util\FeedbackToken.cs" />
