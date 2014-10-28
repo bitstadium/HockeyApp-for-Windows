@@ -47,7 +47,7 @@ namespace HockeyApp.AppLoader.ViewModels
         public bool WasDeletedOnServer { get; private set; }
         public async Task<bool> LoadThread(string token)
         {
-            this.FeedbackThread = await HockeyClientWPF.Instance.OpenFeedbackThreadAsync(token);
+            this.FeedbackThread = await HockeyClient.Current.OpenFeedbackThreadAsync(token);
             this.FeedbackMessages.Clear();
 
             if (this.FeedbackThread != null)
@@ -173,7 +173,7 @@ namespace HockeyApp.AppLoader.ViewModels
             }
         }
 
-        public override string MessageFrom { get { return HockeyApp.HockeyClient.Instance.UserID; } }
+        public override string MessageFrom { get { return (HockeyApp.HockeyClient.Current as HockeyClient).UserID; } }
 
         private string _messageText = "";
         public override string UserMessage

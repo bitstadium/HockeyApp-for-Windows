@@ -10,6 +10,7 @@ using System.Text;
 using HockeyApp.AppLoader.Extensions;
 using System.Threading.Tasks;
 using System.Net;
+using System.Windows;
 
 namespace HockeyApp.AppLoader.ViewModels
 {
@@ -37,7 +38,8 @@ namespace HockeyApp.AppLoader.ViewModels
         public string BundleId { get { return this._app.BundleID; } }
         public AppInfoReleaseType ReleaseType { get { return (AppInfoReleaseType)Int32.Parse(this._app.ReleaseType); } }
 
-        
+        public Boolean IsWindowsPhone { get { return this._app.Platform == AppInfoPlatforms.WindowsPhone; } }
+
         public string AppImage { get {
             string retVal = "";
             if (string.IsNullOrWhiteSpace(this._app.AppImage))
@@ -140,5 +142,10 @@ namespace HockeyApp.AppLoader.ViewModels
             ConfigurationStore.Instance.Save();
         }
 
+
+        public void CopyAppIDToClipboard()
+        {
+            Clipboard.SetText(this.PublicAppID );
+        }
     }
 }

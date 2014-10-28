@@ -19,6 +19,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary Source="MyColors.xaml"/>
                 <ResourceDictionary Source="MyIcons.xaml"/>
                 <ResourceDictionary>
                     <converters:ConfigurableBooleanToVisibilityConverter
@@ -150,13 +151,27 @@
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="4"/>
                                 </Grid.RowDefinitions>
-                                <Image Source="{Binding AppImage}" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                                    <Image.Clip>
-                                        <RectangleGeometry RadiusX="{Binding CornerRadius}"
-                                                    RadiusY="{Binding CornerRadius}"
-                                                    Rect="0,0,50,50" />
-                                    </Image.Clip>
-                                </Image>
+                                <Border Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Setters>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsWindowsPhone}" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource HighlightBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Image Source="{Binding AppImage}">
+                                        <Image.Clip>
+                                            <RectangleGeometry RadiusX="{Binding CornerRadius}"
+                                                        RadiusY="{Binding CornerRadius}"
+                                                        Rect="0,0,50,50" />
+                                        </Image.Clip>
+                                    </Image>
+                                </Border>
                                 <!--
                                 <ContentControl Content="{StaticResource AndroidAppBadgeIcon}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                                 -->

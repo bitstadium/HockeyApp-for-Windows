@@ -62,9 +62,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AppLimit.NetSparkle.Net40.dll</HintPath>
     </Reference>
-    <Reference Include="Args, Version=1.1.0.32856, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Args, Version=1.1.0.37402, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
+      <HintPath>..\packages\Args.1.1.2\lib\Net40\Args.dll</HintPath>
     </Reference>
     <Reference Include="Caliburn.Micro, Version=1.5.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,6 +77,14 @@
     <Reference Include="Caliburn.Micro.Logging.NLog, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Caliburn.Micro.Logging.NLog.1.5.0.0\lib\net40\Caliburn.Micro.Logging.NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="HockeyApp, Version=2.2.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\HockeySDK.WPF.2.2.0-beta5\lib\net45\HockeyApp.dll</HintPath>
+    </Reference>
+    <Reference Include="HockeyAppPCL, Version=2.2.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\HockeySDK.Core.2.2.0-beta5\lib\portable-net45+win8+wp8+wpa81+win81\HockeyAppPCL.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=0.13.0.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -400,16 +408,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\HockeySDK-Windows\HockeySDK_Portable45\HockeySDK_Portable45.csproj">
-      <Project>{643606ba-84a8-483f-a582-49e472b8701e}</Project>
-      <Name>HockeySDK_Portable45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\HockeySDK-Windows\HockeySDK_WPF45\HockeySDK_WPF45.csproj">
-      <Project>{c9612531-2077-4662-b8a4-092e06d5069b}</Project>
-      <Name>HockeySDK_WPF45</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -97,7 +97,7 @@ namespace HockeyApp.AppLoader.ViewModels
         #region Commands
         public void NewThread()
         {
-            FeedbackThreadViewModel newThread = new FeedbackThreadViewModel(HockeyApp.HockeyClientWPF.Instance.CreateFeedbackThread());
+            FeedbackThreadViewModel newThread = new FeedbackThreadViewModel(HockeyClient.Current.CreateFeedbackThread());
             this.FeedbackThreadList.Add(newThread);
             this.SelectedFeedbackThread = newThread;
         }

@@ -24,14 +24,14 @@ namespace HockeyApp.AppLoader.ViewModels
         {
             this._configuration = IoC.Get<ConfigurationStore>();
             this._userConfiguration = userConfiguration;
-            this.LoadGravatar();
+            Task t = this.LoadGravatar();
         }
 
-        public async void RefreshAvatar()
+        public async Task RefreshAvatarAsync()
         {
-            LoadGravatar();
+            await LoadGravatar();
         }
-        private async void LoadGravatar()
+        private async Task LoadGravatar()
         {
             this.Gravatar = await GravatarHelper.LoadGravatar(this._userConfiguration.GravatarHash);
             NotifyOfPropertyChange(() => this.Gravatar);

@@ -11,9 +11,8 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-
-                </ResourceDictionary>
+                <ResourceDictionary Source="MyIcons.xaml"/>
+                <ResourceDictionary Source="Resources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -42,8 +41,24 @@
         <TextBlock Text="App Information" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="16" Grid.ColumnSpan="2"/>
         
         <TextBlock Text="App ID" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
-        <TextBlock Text="{Binding PublicAppID}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="{Binding PublicAppID}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Menu >
+                <MenuItem cal:Message.Attach="[Event Click] = [Action CopyAppIDToClipboard]" ToolTip="Copy AppId to clipboard">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                            <ContentPresenter Content="{StaticResource ResourceKey=CopyToClipboardIcon}" 
+                                              Width="15"/>
+                            <!--
+                            <TextBlock Text="copy" Margin="5,0,0,0"/>
+                            -->
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
 
+
+            </Menu>
+        </StackPanel>
         <TextBlock Text="Bundle ID" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Height="16" Margin="10,7"/>
         <TextBlock Text="{Binding BundleId}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="16" Margin="0,7"/>
 

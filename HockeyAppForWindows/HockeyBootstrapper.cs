@@ -1,26 +1,27 @@
-﻿using Caliburn.Micro;
+﻿using AppLimit.NetSparkle;
+using Caliburn.Micro;
+using Caliburn.Micro.Logging.NLog;
+using HockeyApp;
+using HockeyApp.AppLoader.Extensions;
 using HockeyApp.AppLoader.Model;
+using HockeyApp.AppLoader.PlatformStrategies;
+using HockeyApp.AppLoader.Util;
 using HockeyApp.AppLoader.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using HockeyApp.AppLoader.Extensions;
-using System.Reflection;
-using Caliburn.Micro.Logging.NLog;
-using HockeyApp.AppLoader.Util;
 using System.Windows;
-using HockeyApp.AppLoader.PlatformStrategies;
-using System.IO;
-using MahApps.Metro.Controls.Dialogs;
-using System.Collections.Specialized;
-using AppLimit.NetSparkle;
 
 namespace HockeyApp.AppLoader
 {
@@ -59,15 +60,8 @@ namespace HockeyApp.AppLoader
             
             
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            HockeyApp.HockeyClientWPF.Instance.Configure(
-                HockeyApp.AppLoader.Properties.Settings.Default.AppID,
-                version.ToString(),
-                null,
-                null,
-                (ex) => "");
-            
-            
-            HockeyApp.HockeyClientWPF.Instance.SendCrashesNowAsync();
+            HockeyClient.Current.Configure(HockeyApp.AppLoader.Properties.Settings.Default.AppID);
+            HockeyClient.Current.SendCrashesAsync();
         }
 
 
@@ -166,17 +160,12 @@ namespace HockeyApp.AppLoader
                     shell.ShowAddUserConfigurationFlyout();
                 }
 
-                await HockeyClientWPF.Instance.UpdateManager.CheckForUpdatesAsync(true, () => {
+                await HockeyClient.Current.CheckForUpdatesAsync(true, () => {
                     if (Application.MainWindow != null) { Application.MainWindow.Close(); }
                     return true; 
                 });
             }
         }
-
-       
-
-
-
 
 
         protected override object GetInstance(Type serviceType, string key)

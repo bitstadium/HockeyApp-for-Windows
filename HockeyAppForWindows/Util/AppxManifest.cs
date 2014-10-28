@@ -53,10 +53,10 @@ namespace HockeyApp.AppLoader.Util
             {
                 if (element != null)
                 {
-                    this.Name = element.Attribute("Name") + "";
-                    this.Publisher = element.Attribute("Publisher") + "";
-                    this.Version = element.Attribute("Version") + "";
-                    this.ProcessorArchitecture = element.Attribute("ProcessorArchitecture") + "";
+                    this.Name = element.Attribute("Name").Value;
+                    this.Publisher = element.Attribute("Publisher").Value;
+                    this.Version = element.Attribute("Version").Value;
+                    this.ProcessorArchitecture = element.Attribute("ProcessorArchitecture").Value;
                 }
             }
             public string Name { get; private set; }

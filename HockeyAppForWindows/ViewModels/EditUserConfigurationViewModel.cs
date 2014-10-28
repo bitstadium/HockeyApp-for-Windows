@@ -257,7 +257,7 @@ namespace HockeyApp.AppLoader.ViewModels
         public bool IsTokenAvailable { get { return this.ApiTokens != null && this.ApiTokens.Count > 0; } }
 
         public bool IsCanceled { get; private set; }
-        public void OK()
+        public async void OK()
         {
 
             this._userConfigurationToEdit.UserConfiguration.Username = this.Username;
@@ -266,8 +266,8 @@ namespace HockeyApp.AppLoader.ViewModels
             if (IsDefault) { ConfigurationStore.Instance.SetDefaultUserConfiguration(this._userConfigurationToEdit.UserConfiguration); }
             ConfigurationStore.Instance.Save();
             this._userConfigurationToEdit.NotifyOfPropertyChange("");
-            this._userConfigurationToEdit.RefreshAvatar();
             this.Close();
+            await this._userConfigurationToEdit.RefreshAvatarAsync();
         }
 
         public bool CanOK

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="HockeyApp" 
-           Language="1033" Version="1.2.3" 
+           Language="1033" Version="1.2.4" 
            Manufacturer="Bit Stadium GmbH" 
            UpgradeCode="86A59F80-0F6B-408A-99F9-2E4A64632B46">
     
@@ -113,11 +113,11 @@
       <Component Id='MahAppsMetro' Guid='*'>
         <File Id="MahAppsMetro" Name="MahApps.Metro.dll" Source="$(var.HockeyAppForWindows.TargetDir)MahApps.Metro.dll" KeyPath="yes"/>
       </Component>
-
+<!--
       <Component Id='SystemNetHttpFormatting' Guid='*'>
         <File Id="SystemNetHttpFormatting" Name="System.Net.Http.Formatting.dll" Source="$(var.HockeyAppForWindows.TargetDir)System.Net.Http.Formatting.dll" KeyPath="yes"/>
       </Component>
-
+-->
 
       <Component Id='CaliburnMicroLogging' Guid='*'>
         <File Id="CaliburnMicroLogging" Name="Caliburn.Micro.Logging.dll" Source="$(var.HockeyAppForWindows.TargetDir)Caliburn.Micro.Logging.dll" KeyPath="yes"/>
