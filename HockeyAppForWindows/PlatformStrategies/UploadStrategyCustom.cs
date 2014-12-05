@@ -76,7 +76,7 @@ namespace HockeyApp.AppLoader.PlatformStrategies
             
             var values = new Dictionary<string, string>()
             {
-                {"notes", _appInfo.Notes},
+                {"notes", _appInfo.Notes + ""},
                 {"notes_type", "1"},
                 {"status", _appInfo.Status.ToString()},
                 {"notify", _appInfo.Notify.ToString()},

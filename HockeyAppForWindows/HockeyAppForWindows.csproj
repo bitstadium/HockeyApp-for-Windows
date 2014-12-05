@@ -78,13 +78,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Caliburn.Micro.Logging.NLog.1.5.0.0\lib\net40\Caliburn.Micro.Logging.NLog.dll</HintPath>
     </Reference>
-    <Reference Include="HockeyApp, Version=2.2.0.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="HockeyApp, Version=2.2.0.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HockeySDK.WPF.2.2.0-beta5\lib\net45\HockeyApp.dll</HintPath>
+      <HintPath>..\packages\HockeySDK.WPF.2.2.1\lib\net45\HockeyApp.dll</HintPath>
     </Reference>
-    <Reference Include="HockeyAppPCL, Version=2.2.0.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="HockeyAppPCL, Version=2.2.0.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HockeySDK.Core.2.2.0-beta5\lib\portable-net45+win8+wp8+wpa81+win81\HockeyAppPCL.dll</HintPath>
+      <HintPath>..\packages\HockeySDK.Core.2.2.0\lib\portable-net45+win8+wp8+wpa81+win81\HockeyAppPCL.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=0.13.0.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -134,6 +134,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Caliburn\Micro\Logging\DebugLogger.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DemoConstants.cs" />
     <Compile Include="Extensions\AppInfoPlatformTypeConverter.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\EnumValueExtension.cs" />
@@ -158,6 +160,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Util\AppxBundleManifest.cs" />
     <Compile Include="Util\AppxManifest.cs" />
     <Compile Include="Util\ConsoleHelpFormatterCustom.cs" />
     <Compile Include="Util\CustomUserSettingsProvider.cs" />

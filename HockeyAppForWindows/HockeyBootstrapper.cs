@@ -60,7 +60,19 @@ namespace HockeyApp.AppLoader
             
             
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            HockeyClient.Current.Configure(HockeyApp.AppLoader.Properties.Settings.Default.AppID);
+            
+
+#if DEBUG
+            HockeyClient.Current.Configure(Constants.AppId);
+            ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, a1) =>
+            {
+                if (Debugger.IsAttached) { Debugger.Break(); }
+            };
+            
+#else
+            HockeyClient.Current.Configure(DemoConstants.AppId);
+#endif
+
             HockeyClient.Current.SendCrashesAsync();
         }
 

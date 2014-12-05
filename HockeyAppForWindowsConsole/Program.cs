@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using HockeyApp.AppLoader.Model;
 using HockeyApp.AppLoader.PlatformStrategies;
 using HockeyApp.AppLoader.Util;
+using HockeyApp;
+using System.Diagnostics;
 
 namespace HockeyAppForWindows.Hoch
 {
@@ -29,12 +31,22 @@ namespace HockeyAppForWindows.Hoch
             }
         }
 
-        
-
         static void Main(string[] args)
         {
 
-            new CrashHandler();
+#if DEBUG
+            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.Constants.AppId);
+            ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, a1) =>
+            {
+                if (Debugger.IsAttached) { Debugger.Break(); }
+            };
+#else
+            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.DemoConstants.AppId);
+#endif
+
+
+            var tCrashes = HockeyApp.HockeyClient.Current.SendCrashesAsync(true);
+            
 
             HockeyApp.AppLoader.Model.ConfigurationStore c = HockeyApp.AppLoader.Model.ConfigurationStore.Instance;
             if (Environment.CommandLine.ToUpper().Contains("/HELP"))
@@ -59,6 +71,7 @@ namespace HockeyAppForWindows.Hoch
                     LogToConsole("Wrong parameter: " + errMsg);
                     return;
                 }
+
                 AsyncUploader bs = new AsyncUploader();
                 Task<int> t = bs.MainAsync(_args);
                 t.Wait();
@@ -68,7 +81,14 @@ namespace HockeyAppForWindows.Hoch
             {
                 HockeyApp.AppLoader.Model.CommandLineArgs.WriteHelp(Console.Out, "HOCH");
             }
-            Console.ReadLine();
+
+            tCrashes.Wait();
+
+            
+            #if DEBUG
+                Console.ReadLine();
+            #endif   
+            
         }
 
         

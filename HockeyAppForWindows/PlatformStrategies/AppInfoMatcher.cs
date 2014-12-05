@@ -75,7 +75,15 @@ namespace HockeyApp.AppLoader.PlatformStrategies
         {
             List<AppInfo> apps = this._envelope.Apps.Where(p => p.Platform == AppInfoPlatforms.WindowsPhone).ToList();
             if(!this.MatchCommonSwitches(apps)){
-                ZipArchive zip = new ZipArchive(File.OpenRead(_args.Package),ZipArchiveMode.Read,false);
+                ZipArchive zip = null;
+                if (_args.Package.ToUpper().EndsWith("APPXBUNDLE"))
+                {
+                    zip = GetInnerPackageFromBundle(_args.Package);
+                }
+                else
+                {
+                    zip = new ZipArchive(File.OpenRead(_args.Package), ZipArchiveMode.Read, false);
+                }
                 foreach (ZipArchiveEntry zipEntry in zip.Entries)
                 {
                     if (zipEntry.Name.Equals("WMAppManifest.xml"))
@@ -125,6 +133,37 @@ namespace HockeyApp.AppLoader.PlatformStrategies
                     }
                 }
             }
+        }
+
+        private ZipArchive GetInnerPackageFromBundle(string filename)
+        {
+            ZipArchive retVal = null;
+             ZipArchive zip = new ZipArchive(File.OpenRead(_args.Package),ZipArchiveMode.Read,false);
+             List<string> applicationEntries = new List<string>();
+             foreach (ZipArchiveEntry zipEntry in zip.Entries)
+             {
+                 if (zipEntry.Name.Equals("AppxBundleManifest.xml"))
+                 {
+                     using (Stream s = zipEntry.Open())
+                     {
+                         applicationEntries = AppxBundleManifest.GetApplicationEntries(s);
+                     }
+
+                 }
+             }
+             if (applicationEntries != null && applicationEntries.Count > 0)
+             {
+                 string f = applicationEntries[0];
+                 foreach (ZipArchiveEntry zipEntry in zip.Entries)
+                 {
+                     if (zipEntry.Name.Equals(f))
+                     {
+                         retVal = new ZipArchive(zipEntry.Open());
+                     }
+                 }
+             }
+
+            return retVal;
         }
 
         private string GetValueFromStream(Stream stream, string key)
