@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="HockeyApp" 
+           Language="1033" Version="1.2.5" 
+           Manufacturer="Bit Stadium GmbH" 
+           UpgradeCode="86A59F80-0F6B-408A-99F9-2E4A64632B46">
+    
+    <Package InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perMachine" 
+             Description="HockeyApp Setup" 
+             Manufacturer="Bit Stadium GmbH" InstallPrivileges="elevated" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes"  />
+    <MediaTemplate EmbedCab="yes"/>
+
+    <Feature Id="ProductFeature" Title="HockeyApp For Windows" Level="1"  ConfigurableDirectory="INSTALLFOLDER" Description="HockeyApp" Display="expand">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ProgramMenuDir" />
+    </Feature>
+
+    <Icon Id="hockey_logo.ico" SourceFile="./hockey_logo.ico" />
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+
+      <Publish Dialog="ExitDialog"
+        Control="Finish"
+        Event="DoAction"
+        Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+    </UI>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
+
+    <WixVariable Id="WixUILicenseRtf" Value="Lizenz.rtf" />
+    <WixVariable Id="WixUIDialogBmp" Value="DialogLeft.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="Banner.bmp" />
+    
+    <Property Id="ARPPRODUCTICON" Value="hockey_logo.ico" />
+    
+
+    <Property Id="WixShellExecTarget" Value="[#HockeyAppForWindowsExe]" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch HockeyApp" />
+    <CustomAction Id="LaunchApplication"  BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+   
+    
+  </Product> 
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder"> 
+        <Directory Id="INSTALLFOLDER" Name="HockeyApp" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="HockeyApp"> 
+        </Directory>
+      </Directory>
+    </Directory> 
+
+    <Component Id="ProgramMenuDir" Guid="*" Directory="ProgramMenuDir">
+      <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+      <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+    </Component>
+    
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent">
+        <File Id="HockeyAppForWindowsExe" Name="HockeyAppForWindows.exe" Source="$(var.HockeyAppForWindows.TargetDir)HockeyAppForWindows.exe" KeyPath="yes" >
+          <Shortcut Id="startmenuProgramShortcut" Directory="ProgramMenuDir" Name="HockeyApp" WorkingDirectory="INSTALLFOLDER" Icon="hockey_logo.ico" Advertise="yes" />
+        </File>
+
+        <!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\HockeyAppForWindows\Capabilities" Name="ApplicationDescription" Value="HockeyAppForWindows" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\HockeyAppForWindows\Capabilities" Name="ApplicationIcon" Value="[INSTALLFOLDER]HockeyAppForWindows.exe,0" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\HockeyAppForWindows\Capabilities" Name="ApplicationName" Value="HockeyAppForWindows" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\HockeyAppForWindows\Capabilities\DefaultIcon" Value="[INSTALLFOLDER]HockeyAppForWindows.exe,1" Type="string" />        
+
+
+        <RegistryValue Root="HKLM" Key="SOFTWARE\HockeyAppForWindows" Name="ApplicationFolder" Value="[INSTALLFOLDER]" Type="string" />
+
+        <!-- App Paths to support Start,Run -> "myapp" -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\HockeyAppForWindows.exe" Value="[!HockeyAppForWindows.exe]" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\HockeyAppForWindows.exe" Name="Path" Value="[INSTALLFOLDER]" Type="string" />
+
+
+     
+      </Component>
+
+      <Component Id='Args' Guid='*'>
+        <File Id="Args" Name="Args.dll" Source="$(var.HockeyAppForWindows.TargetDir)Args.dll" KeyPath="yes"/>
+      </Component>
+
+      <Component Id='CaliburnMicroLib' Guid='*'>
+        <File Id='CaliburnMicroDll' Name='Caliburn.Micro.dll' Source='$(var.HockeyAppForWindows.TargetDir)Caliburn.Micro.dll' KeyPath='yes' />
+      </Component>
+
+      <Component Id='HockeyAppSDK' Guid='*'>
+        <File Id='HockeyAppSDK' Name='HockeyApp.dll' Source='$(var.HockeyAppForWindows.TargetDir)HockeyApp.dll' KeyPath='yes' />
+      </Component>
+      
+      <Component Id='HockeyUploadExeConfig' Guid='*'>
+        <File Id="HockeyUploadExeConfig" Name="HockeyAppForWindows.exe.config" Source="$(var.HockeyAppForWindows.TargetDir)HockeyAppForWindows.exe.config" KeyPath="yes"/>
+      </Component>
+
+      <Component Id='Hoch' Guid='*'>
+        <File Id="Hoch" Name="Hoch.exe" Source="$(var.HockeyAppForWindowsConsole.TargetDir)Hoch.exe" KeyPath="yes"/>
+      </Component>
+      
+      <Component Id='HockeyAppPCL' Guid='*'>
+        <File Id="HockeyAppPCL" Name="HockeyAppPCL.dll" Source="$(var.HockeyAppForWindows.TargetDir)HockeyAppPCL.dll" KeyPath="yes"/>
+      </Component>
+
+      <Component Id='MahAppsMetro' Guid='*'>
+        <File Id="MahAppsMetro" Name="MahApps.Metro.dll" Source="$(var.HockeyAppForWindows.TargetDir)MahApps.Metro.dll" KeyPath="yes"/>
+      </Component>
+<!--
+      <Component Id='SystemNetHttpFormatting' Guid='*'>
+        <File Id="SystemNetHttpFormatting" Name="System.Net.Http.Formatting.dll" Source="$(var.HockeyAppForWindows.TargetDir)System.Net.Http.Formatting.dll" KeyPath="yes"/>
+      </Component>
+-->
+
+      <Component Id='CaliburnMicroLogging' Guid='*'>
+        <File Id="CaliburnMicroLogging" Name="Caliburn.Micro.Logging.dll" Source="$(var.HockeyAppForWindows.TargetDir)Caliburn.Micro.Logging.dll" KeyPath="yes"/>
+      </Component>
+
+      <Component Id='CaliburnMicroLoggingNLog' Guid='*'>
+        <File Id="CaliburnMicroLoggingNLog" Name="Caliburn.Micro.Logging.NLog.dll" Source="$(var.HockeyAppForWindows.TargetDir)Caliburn.Micro.Logging.NLog.dll" KeyPath="yes"/>
+      </Component>
+
+      <Component Id='NLog' Guid='*'>
+        <File Id="NLog" Name="NLog.dll" Source="$(var.HockeyAppForWindows.TargetDir)NLog.dll" KeyPath="yes"/>
+      </Component>
+      
+
+      <Component Id='InteractivityLib' Guid='*'>
+        <File Id='InteractivityDll' Name='System.Windows.Interactivity.dll' Source='$(var.HockeyAppForWindows.TargetDir)System.Windows.Interactivity.dll' KeyPath='yes' />
+      </Component>
+
+      <Component Id='WindowsInstallerSDK' Guid='*'>
+        <File Id='WindowsInstallerSDK' Name='Microsoft.Deployment.WindowsInstaller.dll' Source='$(var.HockeyAppForWindows.TargetDir)Microsoft.Deployment.WindowsInstaller.dll' KeyPath='yes' />
+      </Component>
+
+      <Component Id='WindowsInstallerLinqSDK' Guid='*'>
+        <File Id='WindowsInstallerLinqSDK' Name='Microsoft.Deployment.WindowsInstaller.Linq.dll' Source='$(var.HockeyAppForWindows.TargetDir)Microsoft.Deployment.WindowsInstaller.Linq.dll' KeyPath='yes' />
+      </Component>
+
+      <Component Id='Netsparkle' Guid='*'>
+        <File Id='Netsparkle' Name='AppLimit.NetSparkle.Net40.dll' Source='$(var.HockeyAppForWindows.TargetDir)AppLimit.NetSparkle.Net40.dll' KeyPath='yes' />                    
+      </Component>
+
+      
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>

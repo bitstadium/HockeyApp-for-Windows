@@ -1,0 +1,19 @@
+﻿<Application x:Class="HockeyAppLoader.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HockeyApp.AppLoader"
+             xmlns:converter="clr-namespace:HockeyApp.AppLoader.Views.Converters"   
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <local:HockeyBootstrapper x:Key="bootstrapper"/>
+                    <converter:BooleanNotConverter x:Key="BooleanNotConverter"/>
+                    <converter:ConfigurableBooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                    <converter:ConfigurableBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" True="Hidden" False="Visible" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
