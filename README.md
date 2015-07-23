@@ -45,3 +45,7 @@ For integrating the upload in a built server you have to use the command line to
     [/verbose]: (optional) Verbose [true,false] (default is true)
 
 If using HOCH.exe the uploader has to identify one app exactly - if no or more than one app is found, the uploader throws an exception.
+
+## Contributor License
+
+You must sign a [Contributor License Agreement](https://cla.microsoft.com/) before submitting your pull request. To complete the Contributor License Agreement (CLA), you will need to submit a request via the [form](https://cla.microsoft.com/) and then electronically sign the CLA when you receive the email containing the link to the document. You need to sign the CLA only once to cover submission to any Microsoft OSS project. 
