@@ -35,7 +35,7 @@ namespace HockeyAppForWindows.Hoch
         {
 
 #if DEBUG
-            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.Constants.AppId);
+            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.DemoConstants.AppId);
             ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, a1) =>
             {
                 if (Debugger.IsAttached) { Debugger.Break(); }

@@ -63,7 +63,7 @@ namespace HockeyApp.AppLoader
             
 
 #if DEBUG
-            HockeyClient.Current.Configure(Constants.AppId);
+            HockeyClient.Current.Configure(DemoConstants.AppId);
             ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, a1) =>
             {
                 if (Debugger.IsAttached) { Debugger.Break(); }
