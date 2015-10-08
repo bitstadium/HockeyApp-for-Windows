@@ -11,6 +11,8 @@ using HockeyApp.AppLoader.PlatformStrategies;
 using HockeyApp.AppLoader.Util;
 using HockeyApp;
 using System.Diagnostics;
+using Microsoft.ApplicationInsights;
+using System.Security.Cryptography;
 
 namespace HockeyAppForWindows.Hoch
 {
@@ -35,7 +37,7 @@ namespace HockeyAppForWindows.Hoch
         {
 
 #if DEBUG
-            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.Constants.AppId);
+            HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.DemoConstants.AppId);
             ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, a1) =>
             {
                 if (Debugger.IsAttached) { Debugger.Break(); }
@@ -46,7 +48,27 @@ namespace HockeyAppForWindows.Hoch
 
 
             var tCrashes = HockeyApp.HockeyClient.Current.SendCrashesAsync(true);
-            
+
+            // Create new Telemetry Client with proper iKey
+            var AIClient = new TelemetryClient();
+            AIClient.InstrumentationKey = "ceb7f928-d67f-479d-930b-2afa7c42a386";
+
+            // Set AnonUserId using SHA256 hash.
+            SHA256 sha = SHA256Managed.Create();
+            byte[] hashedBytes = sha.ComputeHash(Encoding.Unicode.GetBytes(Environment.UserName));
+            StringBuilder anonID = new StringBuilder();
+            foreach (byte b in hashedBytes)
+            {
+                anonID.AppendFormat("{0:X2}", b);
+            }
+            AIClient.Context.User.Id = anonID.ToString();
+
+            // Log a PageView as a substitute for a session event
+            AIClient.TrackPageView("WindowsUploadConsole App Start");
+
+            // Flush so that the messages are sent before closing down
+            AIClient.Flush();
+
 
             HockeyApp.AppLoader.Model.ConfigurationStore c = HockeyApp.AppLoader.Model.ConfigurationStore.Instance;
             if (Environment.CommandLine.ToUpper().Contains("/HELP"))
