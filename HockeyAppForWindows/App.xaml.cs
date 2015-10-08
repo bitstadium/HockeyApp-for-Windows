@@ -26,7 +26,7 @@ namespace HockeyAppLoader
 
             // Create new Telemetry Client with proper iKey
             AIClient = new TelemetryClient();
-            AIClient.InstrumentationKey = "a53c58f3-f38a-4911-a806-c91371cc2aa5";
+            AIClient.InstrumentationKey = "ceb7f928-d67f-479d-930b-2afa7c42a386";
 
             // Set AnonUserId using SHA256 hash.
             SHA256 sha = SHA256Managed.Create();
