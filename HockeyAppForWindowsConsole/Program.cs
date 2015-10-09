@@ -64,7 +64,7 @@ namespace HockeyAppForWindows.Hoch
             AIClient.Context.User.Id = anonID.ToString();
 
             // Log a PageView as a substitute for a session event
-            AIClient.TrackPageView("WindowsUploadConsole App Start");
+            AIClient.TrackEvent("WindowsUploadConsole App Start");
 
             // Flush so that the messages are sent before closing down
             AIClient.Flush();
