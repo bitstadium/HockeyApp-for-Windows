@@ -39,7 +39,7 @@ namespace HockeyAppLoader
             AIClient.Context.User.Id = anonID.ToString();
 
             // Log a PageView as a substitute for a session event
-            AIClient.TrackPageView("App Start");
+            AIClient.TrackEvent("App Start");
 
             // Flush so that the messages are sent before closing down
             AIClient.Flush();
