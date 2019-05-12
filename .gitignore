@@ -36,3 +36,5 @@ _ReSharper*/
 packages/*
 !packages/repositories.config
 /HockeyAppForWindows/Constants.cs
+
+.vs/

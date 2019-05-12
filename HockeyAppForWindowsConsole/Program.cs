@@ -13,6 +13,7 @@ using HockeyApp;
 using System.Diagnostics;
 using Microsoft.ApplicationInsights;
 using System.Security.Cryptography;
+using System.Net;
 
 namespace HockeyAppForWindows.Hoch
 {
@@ -35,6 +36,8 @@ namespace HockeyAppForWindows.Hoch
 
         static void Main(string[] args)
         {
+            // Set .Net to use only TLS 1.2 protocol
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
 #if DEBUG
             HockeyApp.HockeyClient.Current.Configure(HockeyApp.AppLoader.DemoConstants.AppId);
