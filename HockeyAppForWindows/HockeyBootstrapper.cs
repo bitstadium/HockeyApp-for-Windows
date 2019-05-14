@@ -17,6 +17,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -37,7 +38,9 @@ namespace HockeyApp.AppLoader
         {
             LogManager.GetLog = type => new NLogLogger(type);
             HockeyApp.HockeyLogManager.GetLog = type => new HockeyAppLogger();
-            
+
+            // Set .Net to use only TLS 1.2 protocol
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
         protected override void Configure()
